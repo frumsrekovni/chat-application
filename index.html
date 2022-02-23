@@ -49,6 +49,12 @@
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
     });   
+    socket.on('user-disconnected', name => {
+        var item = document.createElement('li');
+        item.textContent = 'User disconnected: '+name;
+        messages.appendChild(item);
+        window.scrollTo(0, document.body.scrollHeight);
+    });   
     </script>
   </body>
 </html>

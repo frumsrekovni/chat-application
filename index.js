@@ -17,13 +17,15 @@ io.on('connection', (socket) => {
         console.log('message: ' + msg);
         });
     socket.on('new-user', name => {
-      users[socket.id] = name
-      io.emit('user-connected', name)
+      users[socket.id] = name;
+      io.emit('user-connected', name);
       console.log(name,'connected');
     });    
     socket.on('disconnect', () => {
-        console.log(users[socket.id],'disconnected');
-        });
+      io.emit('user-disconnected', users[socket.id]);
+      delete users[socket.id];
+      console.log(users[socket.id],'disconnected');
+    });
     
 
 });
