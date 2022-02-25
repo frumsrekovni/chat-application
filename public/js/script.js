@@ -12,21 +12,25 @@ form.addEventListener('submit', function(e) {
     input.value = '';
     }
 });
+
 socket.on('chat message', function(msg) {
     var item = document.createElement('li');
     item.textContent = msg;
     messages.appendChild(item);
-    window.scrollTo(0, document.body.scrollHeight);
+    var chat_messages = document.getElementById('messages');
+    chat_messages.scrollTop = chat_messages.scrollHeight;
 });
 socket.on('user-connected', name => {
     var item = document.createElement('li');
     item.textContent = 'New user connected: '+name;
     messages.appendChild(item);
-    window.scrollTo(0, document.body.scrollHeight);
+    var chat_messages = document.getElementById('messages');
+    chat_messages.scrollTop = chat_messages.scrollHeight;
 });   
 socket.on('user-disconnected', name => {
     var item = document.createElement('li');
     item.textContent = 'User disconnected: '+name;
     messages.appendChild(item);
-    window.scrollTo(0, document.body.scrollHeight);
+    var chat_messages = document.getElementById('messages');
+    chat_messages.scrollTop = chat_messages.scrollHeight;
 }); 
