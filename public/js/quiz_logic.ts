@@ -19,6 +19,20 @@ const questions = [
         b:"Nigeria",
         c:"Russia",
         correct:"b"
+    },
+    {
+        question:"What country is the largest by area?",
+        a:"Sweden",
+        b:"Denmark",
+        c:"Norway",
+        correct:"b"
+    },
+    {
+        question:"What country is the most populous?",
+        a:"Spain",
+        b:"Venezuela",
+        c:"Morocco",
+        correct:"b"
     }
 ];
 const quiz = document.getElementById("quiz_container");
