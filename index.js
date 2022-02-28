@@ -13,19 +13,26 @@ app.get('/', (req, res) => {
 
 io.on('connection', (socket) => {
     socket.on('chat message', (msg) => {
-        io.emit('chat message', msg);
-        console.log('message: ' + msg);
-        });
+      io.emit('chat message', msg);
+      console.log('message: ' + msg);
+      });
+    socket.on('update-score', new_score => {
+      console.log("I AM RECEIVING UPDATED SCORES");
+      socket.broadcast.emit('update-score', new_score);
+      });
     socket.on('new-user', name => {
       users[socket.id] = name;
-      io.emit('user-connected', name);
+      socket.broadcast.emit('user-connected',name);
       console.log(name,'connected');
-    });    
-    socket.on('disconnect', () => {
+      });    
+    socket.on('disconnect', () => { //Need to fix this.. Function???
       io.emit('user-disconnected', users[socket.id]);
       delete users[socket.id];
       console.log(users[socket.id],'disconnected');
-    });
+
+
+
+      });
     
 
 });
