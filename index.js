@@ -6,6 +6,7 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 
 const users = {}
+const scores = {}
 app.use(express.static(__dirname + '/public'));
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
@@ -16,26 +17,29 @@ io.on('connection', (socket) => {
       io.emit('chat message', msg);
       console.log('message: ' + msg);
       });
-    socket.on('update-score', new_score => {
-      console.log("I AM RECEIVING UPDATED SCORES");
-      socket.broadcast.emit('update-score', new_score);
+    socket.on('scoreboard-update', new_score => {
+      scores[socket.id] = new_score;
+      socket.emit('scoreboard-update', users);
+      //socket.broadcast.emit('update-score', new_score);
       });
     socket.on('new-user', name => {
       users[socket.id] = name;
+      scores[socket.id] = 0;
       socket.broadcast.emit('user-connected',name);
-      console.log(name,'connected');
       });    
-    socket.on('disconnect', () => { //Need to fix this.. Function???
+    socket.on('disconnect', () => {
       io.emit('user-disconnected', users[socket.id]);
       delete users[socket.id];
-      console.log(users[socket.id],'disconnected');
-
-
-
+      delete scores[socket.id];
       });
     
 
 });
+setInterval(printUsers, 2000);
+function printUsers(){
+  console.log(users);
+  console.log(scores);
+}
 
 server.listen(3000, () => {
   console.log('listening on *:3000');

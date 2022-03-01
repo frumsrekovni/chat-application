@@ -52,6 +52,7 @@ var cur_score = 0;
 
 const inserted_name = prompt('What is your name?')
 socket.emit('new-user', inserted_name)
+update_scoreboard();
 
 form.addEventListener('submit', function(e) {
     e.preventDefault();
@@ -69,7 +70,6 @@ socket.on('chat message', function(msg) {
     chat_messages.scrollTop = chat_messages.scrollHeight;
 });
 socket.on('update-score', new_score => {
-    console.log("IM UPDATING OPPONENT SCORE NOW");
     document.getElementById("opponent_score").innerHTML = "".concat(new_score);
 });
 socket.on('user-connected', name => {
@@ -78,6 +78,7 @@ socket.on('user-connected', name => {
     messages.appendChild(item);
     var chat_messages = document.getElementById('messages');
     chat_messages.scrollTop = chat_messages.scrollHeight;
+    update_scoreboard();
 });   
 socket.on('user-disconnected', name => {
     var item = document.createElement('li');
@@ -86,6 +87,22 @@ socket.on('user-disconnected', name => {
     var chat_messages = document.getElementById('messages');
     chat_messages.scrollTop = chat_messages.scrollHeight;
 }); 
+socket.on('scoreboard-update', users => {
+    while (opponent_score.hasChildNodes()) {
+        opponent_score.removeChild(opponent_score.firstChild);
+    }
+    for (const [key, value] of Object.entries(users)) {
+        var username = document.createElement('li');
+        username.textContent = value;
+        opponent_score.appendChild(username);   
+    }
+}); 
+
+
+
+function update_scoreboard(){
+    socket.emit("scoreboard-update",cur_score);
+};
 
 
 /* ##### QUIZ LOGIC ##### */
