@@ -93,8 +93,11 @@ socket.on('scoreboard-update', users => {
     }
     for (const [key, value] of Object.entries(users)) {
         var username = document.createElement('li');
+        var score = document.createElement('li');
         username.textContent = value;
+        score.textContent = '0';
         opponent_score.appendChild(username);   
+        opponent_score.appendChild(score);
     }
 }); 
 

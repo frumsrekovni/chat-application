@@ -35,11 +35,11 @@ io.on('connection', (socket) => {
     
 
 });
-setInterval(printUsers, 2000);
-function printUsers(){
-  console.log(users);
-  console.log(scores);
-}
+
+// function printUsers(){
+//   console.log(users);
+//   console.log(scores);
+// }
 
 server.listen(3000, () => {
   console.log('listening on *:3000');
