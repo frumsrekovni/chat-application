@@ -38,6 +38,13 @@ var questions = [
         b: "Venezuela",
         c: "Morocco",
         correct: "b"
+    },
+    {
+        question: "What country is closest to the equator?",
+        a: "Egypt",
+        b: "South Africa",
+        c: "Yemen",
+        correct: "c"
     }
 ];
 var quiz = document.getElementById("quiz_container");
