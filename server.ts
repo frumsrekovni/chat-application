@@ -5,9 +5,8 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
 
-type player_data = [number, string];
-let all_players_data = new Map<string, player_data>();
-
+type player_data = [number, string]; // Tuple of player name and score
+let all_players_data = new Map<string, player_data>(); 
 
 app.use(express.static(__dirname + '/public'));
 app.get('/', (req, res) => {
@@ -21,6 +20,12 @@ io.on('connection', (socket) => {
       });
     socket.on('scoreboard-update', new_score => {
       all_players_data.get(socket.id)?.[0] = new_score;
+      let temp_scoreboard: string[] = [];
+      let temp_data: string;
+      temp_data = "3934jj";
+      temp_scoreboard.push("aas");
+      console.log(temp_scoreboard);  
+
       // let scoreboard: player_data[];
       // let temp: player_data;
       // temp = [2, 'fuckingtest'];
@@ -33,12 +38,14 @@ io.on('connection', (socket) => {
       //   scoreboard.push(temp);
       // };
       
-      socket.emit('scoreboard-update', scoreboard);
+      //socket.emit('scoreboard-update', scoreboard);
+
+
       });
     socket.on('new-user', name => {
       var user: player_data;
-      user = [0,name];
-      all_players_data.set(socket.id,user);
+      user = [0,name]; // When a new user joins they have the score 0
+      all_players_data.set(socket.id,user); // Put that new user in the players data map
       socket.broadcast.emit('user-connected',name);
       });    
     socket.on('disconnect', () => {
