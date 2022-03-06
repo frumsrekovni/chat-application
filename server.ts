@@ -22,9 +22,14 @@ io.on('connection', (socket) => {
       all_players_data.get(socket.id)?.[0] = new_score;
       let temp_scoreboard: string[] = [];
       let temp_data: string;
+
+      all_players_data.forEach((value, key, map) => {
+        // Prints "greeting Hello" followed by "name John"
+        console.log(value, key);
+      });
       temp_data = "3934jj";
       temp_scoreboard.push("aas");
-      console.log(temp_scoreboard);  
+      //console.log(temp_scoreboard);  
 
       // let scoreboard: player_data[];
       // let temp: player_data;
