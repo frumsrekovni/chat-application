@@ -20,15 +20,17 @@ io.on('connection', (socket) => {
       });
     socket.on('scoreboard-update', new_score => {
       all_players_data.get(socket.id)?.[0] = new_score;
-      let temp_scoreboard: string[] = [];
-      let temp_data: string;
+      let temp_scoreboard: player_data[] = [];
+      let temp_data: player_data = [0,""];
 
       all_players_data.forEach((value, key, map) => {
         // Prints "greeting Hello" followed by "name John"
-        console.log(value, key);
+        temp_data[0] = value[0];
+        temp_data[1] = value[1];
+        console.log(temp_data);
+        temp_scoreboard.push(temp_data);
       });
-      temp_data = "3934jj";
-      temp_scoreboard.push("aas");
+      
       //console.log(temp_scoreboard);  
 
       // let scoreboard: player_data[];
