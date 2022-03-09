@@ -23,31 +23,16 @@ io.on('connection', (socket) => {
       let temp_scoreboard: player_data[] = [];
       let temp_data: player_data = [0,""];
 
-      all_players_data.forEach((value, key, map) => {
+      all_players_data.forEach((value) => {
         // Prints "greeting Hello" followed by "name John"
         temp_data[0] = value[0];
         temp_data[1] = value[1];
-        console.log(temp_data);
+        
         temp_scoreboard.push(temp_data);
       });
-      
-      //console.log(temp_scoreboard);  
-
-      // let scoreboard: player_data[];
-      // let temp: player_data;
-      // temp = [2, 'fuckingtest'];
-      // scoreboard.push(temp);
-      // console.log(scoreboard);
-      
-      // for (let [score,name] of all_players_data.values()) {
-      //   let temp: player_data;
-      //   temp = [score, name];
-      //   scoreboard.push(temp);
-      // };
+      console.log(temp_scoreboard);
       
       //socket.emit('scoreboard-update', scoreboard);
-
-
       });
     socket.on('new-user', name => {
       var user: player_data;
