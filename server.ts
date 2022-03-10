@@ -21,18 +21,11 @@ io.on('connection', (socket) => {
     socket.on('scoreboard-update', new_score => {
       all_players_data.get(socket.id)?.[0] = new_score;
       let temp_scoreboard: player_data[] = [];
-      let temp_data: player_data = [0,""];
-
       all_players_data.forEach((value) => {
-        // Prints "greeting Hello" followed by "name John"
-        temp_data[0] = value[0];
-        temp_data[1] = value[1];
-        
-        temp_scoreboard.push(temp_data);
+        temp_scoreboard.push(value);
       });
       console.log(temp_scoreboard);
-      
-      //socket.emit('scoreboard-update', scoreboard);
+      socket.emit('scoreboard-update', temp_scoreboard);
       });
     socket.on('new-user', name => {
       var user: player_data;
