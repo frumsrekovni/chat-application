@@ -59,7 +59,7 @@ var cur_score = 0;
 
 const inserted_name = prompt('What is your name?')
 socket.emit('new-user', inserted_name)
-//update_scoreboard();
+socket.emit("scoreboard-update",cur_score);
 
 form.addEventListener('submit', function(e) {
     e.preventDefault();
@@ -76,15 +76,13 @@ socket.on('chat message', function(msg) {
     var chat_messages = document.getElementById('messages');
     chat_messages.scrollTop = chat_messages.scrollHeight;
 });
-socket.on('update-score', new_score => {
-    document.getElementById("opponent_score").innerHTML = "".concat(new_score);
-});
 socket.on('user-connected', name => {
     var item = document.createElement('li');
     item.textContent = 'New user connected: '+name;
     messages.appendChild(item);
     var chat_messages = document.getElementById('messages');
     chat_messages.scrollTop = chat_messages.scrollHeight;
+    socket.emit("scoreboard-update",cur_score);
 });   
 socket.on('user-disconnected', name => {
     var item = document.createElement('li');
@@ -111,12 +109,6 @@ socket.on('scoreboard-update', input_scoreboard => {
 }); 
 
 
-
-function update_scoreboard(){
-    socket.emit("scoreboard-update",cur_score);
-};
-
-
 /* ##### QUIZ LOGIC ##### */
 
 load_quiz();
@@ -134,7 +126,7 @@ function check_player_answer() {
             if((answer as HTMLInputElement).id === questions[cur_quiz].correct)
             {
                 cur_score++;
-                update_scoreboard();
+                socket.emit("scoreboard-update",cur_score);
             }
             (answer as HTMLInputElement).checked = false;
         }
