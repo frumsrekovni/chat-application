@@ -57,7 +57,8 @@ const done_button = document.getElementById("done_button");
 var cur_quiz = 0;
 var cur_score = 0;
 
-const inserted_name = prompt('What is your name?')
+const inserted_name = prompt('What username do you want?');
+const room_code = prompt('What room code do you want to join/create?');
 socket.emit('new-user', inserted_name)
 socket.emit("scoreboard-update",cur_score);
 
