@@ -7,14 +7,44 @@
   </head>
   <body>
     <div class="hero_body">
-        <a href="quiz.html">
-            <button>Create Quiz</button>
-        </a>
+      <div id="quiz_container", class="container">
+        <div class="quiz_header">
+            <div id="the_question">the question</div>
+            <ul>
+                <li>
+                    <input type="radio", id="a", name="answer">
+                    <label id="label_a", for="a">Question</label>
+                </li>
+                <li>
+                    <input type="radio", id="b", name="answer">
+                    <label id="label_b", for="b">Questionn</label>
+                </li>
+                <li>
+                    <input type="radio", id="c", name="answer">
+                    <label id="label_c", for="c">Questionnnn</label>
+                </li>
+            </ul>
+        </div>
+        <button id="done_button">Done</button>
+      </div>
+  
+      <div id="chat_window", class="container">
+        <ul id="messages"></ul>
+        <form id="form" action="">
+          <input id="input" autocomplete="off" />
+          <button>Send</button>
+        </form>
+      </div>
+
+      <div class="results">
+        Your current score is <span id="your_score">0</span>
+        <ul id="opponent_score"></ul>
+      </div>
     </div>
     
 
     <script src="/socket.io/socket.io.js"></script>
-    
+    <script src="/js/testscript.js"></script>
     <!--<script src="/js/quiz_logic.js"></script>--> 
   </body>
 </html>
