@@ -6,7 +6,8 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 
 type player_data = [number, string]; // Tuple of player name and score
-let all_players_data = new Map<string, player_data>(); 
+let all_players_data = new Map<string, player_data>();
+let all_player_rooms = new Map<string, string>();
 
 app.use(express.static(__dirname + '/public'));
 app.get('/', (req, res) => {
@@ -14,6 +15,7 @@ app.get('/', (req, res) => {
   });
 
 io.on('connection', (socket) => {
+
     socket.on('chat message', (msg) => {
       io.emit('chat message', msg);
       console.log('message: ' + msg);
@@ -36,8 +38,12 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
       io.emit('user-disconnected', all_players_data.get(socket.id)?.[1]);
       all_players_data.delete(socket.id);
+      all_player_rooms.delete(socket.id);
       });
-    
+    socket.on('new-user', room => {
+      all_player_rooms.set(socket.id,room);
+      socket.join(room);
+      });     
 
 });
 // setInterval(printUsers,2000);

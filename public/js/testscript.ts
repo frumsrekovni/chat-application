@@ -59,7 +59,8 @@ var cur_score = 0;
 
 const inserted_name = prompt('What username do you want?');
 const room_code = prompt('What room code do you want to join/create?');
-socket.emit('new-user', inserted_name)
+socket.emit('new-user', inserted_name);
+socket.emit('new-room', room_code);
 socket.emit("scoreboard-update",cur_score);
 
 form.addEventListener('submit', function(e) {
