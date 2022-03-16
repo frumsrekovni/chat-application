@@ -17,8 +17,7 @@ app.get('/', (req, res) => {
 io.on('connection', (socket) => {
 
     socket.on('chat message', (msg) => {
-      io.emit('chat message', msg);
-      console.log('message: ' + msg);
+      io.to(all_player_rooms.get(socket.id)).emit('chat message', msg); // Only sends the message to other sockets with the same room id. Effectively working as private instances of quiz battles
       });
     socket.on('scoreboard-update', new_score => {
       all_players_data.get(socket.id)?.[0] = new_score;
@@ -27,23 +26,25 @@ io.on('connection', (socket) => {
         temp_scoreboard.push(value);
       });
       console.log(temp_scoreboard);
-      socket.emit('scoreboard-update', temp_scoreboard);
+      //socket.emit('scoreboard-update', temp_scoreboard);
+      io.to(all_player_rooms.get(socket.id)).emit('scoreboard-update', temp_scoreboard);
       });
+    socket.on('new-room', room => {
+      all_player_rooms.set(socket.id,room);
+      socket.join(room);
+      });  
     socket.on('new-user', name => {
       var user: player_data;
       user = [0,name]; // When a new user joins they have the score 0
       all_players_data.set(socket.id,user); // Put that new user in the players data map
-      socket.broadcast.emit('user-connected',name);
+      // socket.broadcast.emit('user-connected',name);
+      io.to(all_player_rooms.get(socket.id)).emit('user-connected',name);
       });    
     socket.on('disconnect', () => {
       io.emit('user-disconnected', all_players_data.get(socket.id)?.[1]);
       all_players_data.delete(socket.id);
       all_player_rooms.delete(socket.id);
-      });
-    socket.on('new-user', room => {
-      all_player_rooms.set(socket.id,room);
-      socket.join(room);
-      });     
+      });   
 
 });
 // setInterval(printUsers,2000);
