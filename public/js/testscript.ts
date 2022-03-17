@@ -59,8 +59,7 @@ var cur_score = 0;
 
 const inserted_name = prompt('What username do you want?');
 const room_code = prompt('What room code do you want to join/create?');
-socket.emit('new-room', room_code); // This must happen before emitting "new-user"
-socket.emit('new-user', inserted_name);
+socket.emit('new-user', { name: inserted_name, room: room_code });
 
 socket.emit("scoreboard-update",cur_score);
 
@@ -86,7 +85,7 @@ socket.on('user-connected', name => {
     var chat_messages = document.getElementById('messages');
     chat_messages.scrollTop = chat_messages.scrollHeight;
     socket.emit("scoreboard-update",cur_score);
-});   
+});    
 socket.on('user-disconnected', name => {
     var item = document.createElement('li');
     item.textContent = 'User disconnected: '+name;
@@ -107,9 +106,9 @@ socket.on('scoreboard-update', input_scoreboard => {
         score.textContent = element?.[0];  
         opponent_score.appendChild(username);   
         opponent_score.appendChild(score);   
-
     });
 }); 
+
 
 
 /* ##### QUIZ LOGIC ##### */
