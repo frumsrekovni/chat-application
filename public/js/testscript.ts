@@ -3,6 +3,34 @@ var socket = io();
 var form = document.getElementById('form');
 var input = document.getElementById('input');
 
+
+const country_area_data = [ // This is by total area in square km (land+water)
+    {Russia:17098246},
+    {Canada:9984670},
+    {China:9596961 },
+    {USA:9833517},
+    {Brazil:8515767},
+    {Australia:7692024},
+    {India:3287263},
+    {Argentina:2780400},
+    {Kazakhstan:2724900},
+    {Algeria:2381741},
+    {Democratic_Republic_of_the_Congo:2344858},
+    {Kingdom_of_Denmark:2220093},
+    {Saudi_Arabia:2149690},
+    {Mexico:1964375},
+    {Indonesia:1904569},
+    {Sudan:1861484},
+    {Libya:1759540},
+    {Iran:1648195},
+    {Mongolia:1564110},
+    {Peru:1285216},
+    {Chad:1284000},
+    {Niger:1267000},
+    {Lesotho:30355},
+    {Switzerland:41284},
+    {Monaco:2},
+];
 const questions = [
     {
         question: "What country is the largest by area?",
