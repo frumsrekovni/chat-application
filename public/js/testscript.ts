@@ -102,10 +102,8 @@ socket.on('scoreboard-update', input_scoreboard => {
     scoreboard.forEach( (element) => {
         var username = document.createElement('li');
         var score = document.createElement('li');  
-        username.textContent = element?.[1];
-        score.textContent = element?.[0];  
-        opponent_score.appendChild(username);   
-        opponent_score.appendChild(score);   
+        username.textContent = (element?.[1]+": "+element?.[0]);
+        opponent_score.appendChild(username); 
     });
 }); 
 
@@ -138,7 +136,6 @@ done_button.addEventListener("click", () => {
     check_player_answer();
     cur_quiz++;
     if (cur_quiz < questions.length) {
-        document.getElementById("your_score").innerHTML = `${cur_score}`
         load_quiz();
     }
     else {
