@@ -5,6 +5,15 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
 
+const fs = require('fs')
+
+fs.readFile('countrydata.txt', 'utf8' , (err, data) => {
+  if (err) {
+    console.error(err)
+    return
+  }
+  console.log(data)
+});
 type player_data = [number, string, string]; // Tuple of player score, name and room
 type scoreboard_data = [number, string]
 let all_players_data = new Map<string, player_data>();
