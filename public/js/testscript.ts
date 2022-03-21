@@ -59,8 +59,14 @@ const current_room = document.querySelector(".current_room span");
 var cur_quiz = 0;
 var cur_score = 0;
 
-const inserted_name = prompt('What username do you want?');
-const room_code = prompt('What room code do you want to join/create?');
+let quiz_started:boolean = false;
+let inserted_name:string = "Error: No name entered";
+let room_code:string = "Error: No room code entered";
+do{
+    inserted_name = prompt('What username do you want?');
+    room_code = prompt('What room code do you want to join/create?'); 
+} while(inserted_name === "" || room_code === "")
+
 socket.emit('new-user', { name: inserted_name, room: room_code });
 current_room!.innerText = room_code;
 
@@ -115,7 +121,7 @@ socket.on('scoreboard-update', input_scoreboard => {
 
 /* ##### QUIZ LOGIC ##### */
 
-load_quiz();
+//load_quiz();
 function load_quiz() {
     const cur_quiz_data = questions[cur_quiz];
     element_question.innerText = cur_quiz_data.question;
@@ -137,13 +143,21 @@ function check_player_answer() {
     });
 }
 done_button.addEventListener("click", () => {
-    check_player_answer();
-    cur_quiz++;
-    if (cur_quiz < questions.length) {
+
+    if(!quiz_started){
+        quiz_started = true;
+        document.getElementById("done_button")?.innerText = "Next Question";
         load_quiz();
     }
-    else {
-        quiz.innerHTML = `<div>You got ${cur_score} out of ${questions.length} </div><button onclick="location.reload()">Reload</button>`;
+    else{
+        check_player_answer();
+        cur_quiz++;
+        if (cur_quiz < questions.length) {
+            load_quiz();
+        }
+        else {
+            quiz.innerHTML = `<div>You got ${cur_score} out of ${questions.length} </div><button onclick="location.reload()">Reload</button>`;
+        }
     }
 });
 

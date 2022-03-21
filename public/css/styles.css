@@ -19,6 +19,9 @@ body {
     width: 300px;
     position: relative;
 }
+.quiz_header li{
+    list-style: none;
+}
 #chat_window{
     height: 25vh;
 }

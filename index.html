@@ -7,25 +7,29 @@
   </head>
   <body>
     <div class="hero_body">
+      <div class="results">
+        Current Scoreboard:
+        <ul id="opponent_score"></ul>
+      </div>
       <div id="quiz_container", class="container">
         <div class="quiz_header">
-            <div id="the_question">the question</div>
+            <div id="the_question">Press start when everyone has joined</div>
             <ul>
                 <li>
                     <input type="radio", id="a", name="answer">
-                    <label id="label_a", for="a">Question</label>
+                    <label id="label_a", for="a"></label>
                 </li>
                 <li>
                     <input type="radio", id="b", name="answer">
-                    <label id="label_b", for="b">Questionn</label>
+                    <label id="label_b", for="b"></label>
                 </li>
                 <li>
                     <input type="radio", id="c", name="answer">
-                    <label id="label_c", for="c">Questionnnn</label>
+                    <label id="label_c", for="c"></label>
                 </li>
             </ul>
         </div>
-        <button id="done_button">Done</button>
+        <button id="done_button">Start</button>
       </div>
   
       <div id="chat_window", class="container">
@@ -36,9 +40,8 @@
         </form>
       </div>
 
-      <div class="results">
-        Current Scoreboard:
-        <ul id="opponent_score"></ul>
+      <div class="current_room">
+        Current room code:<span></span>
       </div>
     </div>
     
