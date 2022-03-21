@@ -55,29 +55,31 @@ const question_label_a = document.getElementById("label_a");
 const question_label_b = document.getElementById("label_b");
 const question_label_c = document.getElementById("label_c");
 const done_button = document.getElementById("done_button");
+const current_room = document.querySelector(".current_room span");
 var cur_quiz = 0;
 var cur_score = 0;
 
 const inserted_name = prompt('What username do you want?');
 const room_code = prompt('What room code do you want to join/create?');
 socket.emit('new-user', { name: inserted_name, room: room_code });
+current_room!.innerText = room_code;
 
 socket.emit("scoreboard-update",cur_score);
-console.log(country_area_data);
 
-form.addEventListener('submit', function(e) {
+
+document.getElementById("form")!.addEventListener('submit', e => {
     e.preventDefault();
     if (input.value) {
     socket.emit('chat message', input.value);
-    input.value = '';
+    input.value = ''; // Empty the input buffer
     }
 });
 
-socket.on('chat message', function(msg) {
+socket.on('chat message', (msg: string) => {
     var item = document.createElement('li');
     item.textContent = msg;
-    messages.appendChild(item);
     var chat_messages = document.getElementById('messages');
+    chat_messages?.appendChild(item);
     chat_messages.scrollTop = chat_messages.scrollHeight;
 });
 socket.on('user-connected', name => {
@@ -94,6 +96,7 @@ socket.on('user-disconnected', name => {
     messages.appendChild(item);
     var chat_messages = document.getElementById('messages');
     chat_messages.scrollTop = chat_messages.scrollHeight;
+    socket.emit("scoreboard-update",cur_score);
 }); 
 socket.on('scoreboard-update', input_scoreboard => {
     while (opponent_score.hasChildNodes()) {
@@ -102,8 +105,7 @@ socket.on('scoreboard-update', input_scoreboard => {
     let scoreboard: player_data[];
     scoreboard = input_scoreboard;
     scoreboard.forEach( (element) => {
-        var username = document.createElement('li');
-        var score = document.createElement('li');  
+        var username = document.createElement('li'); 
         username.textContent = (element?.[1]+": "+element?.[0]);
         opponent_score.appendChild(username); 
     });

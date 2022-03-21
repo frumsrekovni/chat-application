@@ -12,7 +12,8 @@ fs.readFile('countrydata.txt', 'utf8' , (err, data) => {
     console.error(err)
     return
   }
-  console.log(data)
+  
+  //console.log(data)
 });
 type player_data = [number, string, string]; // Tuple of player score, name and room
 type scoreboard_data = [number, string]
@@ -23,12 +24,12 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
   });
 
-io.on('connection', (socket) => {
+io.on('connection', socket => {
 
-    socket.on('chat message', (msg) => {
-      io.to(all_players_data.get(socket.id)?.[2]).emit('chat message', msg); // Only sends the message to other sockets with the same room id. Effectively working as private instances of quiz battles
+    socket.on('chat message', (msg: string) => {
+      io.to(all_players_data.get(socket.id)?.[2]).emit('chat message', all_players_data.get(socket.id)?.[1]+"\n"+msg); // Only sends the message to other sockets with the same room id. Effectively working as private instances of quiz battles
       });
-    socket.on('scoreboard-update', new_score => {
+    socket.on('scoreboard-update', (new_score: number) => {
       all_players_data.get(socket.id)?.[0] = new_score;
       let temp_scoreboard: scoreboard_data[] = [];
       all_players_data.forEach((value) => {

@@ -3,14 +3,19 @@ body {
     margin: 0;
     padding-bottom: 3rem;
     font-family: Helvetica, Arial, sans-serif; 
+
 }
 .hero_body{
     background-color: aqua;
     display: inline-flex;
     position: absolute;
+    top:30%;
+    left: 27%; 
+    width: 50vw;
+    
 }
 .container{
-    background-color: green;
+    background-color: rgb(16, 124, 16);
     width: 300px;
     position: relative;
 }
@@ -41,6 +46,7 @@ body {
 #messages { 
     max-height: 25vh;
     overflow-y: scroll;
+    overflow-wrap: break-word;
     list-style-type: none; margin: 0; padding: 0; 
 }
 #messages > li { padding: 0.5rem 1rem; }
