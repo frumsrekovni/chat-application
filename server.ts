@@ -5,6 +5,18 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
 
+class country{
+  name:string;
+  total_area:number;
+  population:number;
+  constructor(name = "No Country", total_area=0,population=0){
+    this.name = name;
+    this.total_area = total_area;
+    this.population = population;
+  }
+}
+const country_data:[] = [];
+
 const fs = require('fs')
 
 fs.readFile('countrydata.txt', 'utf8' , (err, data) => {
@@ -12,8 +24,14 @@ fs.readFile('countrydata.txt', 'utf8' , (err, data) => {
     console.error(err)
     return
   }
-  
-  //console.log(data)
+  let re = ":"
+  let temp_country:country=["my own",3212323,4443];
+  if (data.search(re) == -1 ) {
+    console.log("Not Found" );
+  } else {
+    console.log(data.search(re));
+  }
+  //console.log(typeof(temp_country))
 });
 type player_data = [number, string, string]; // Tuple of player score, name and room
 type scoreboard_data = [number, string]
