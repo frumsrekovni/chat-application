@@ -4,6 +4,7 @@ const http = require('http');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
+const fs = require('fs')
 
 class country{
   name:string;
@@ -15,31 +16,31 @@ class country{
     this.population = population;
   }
 }
-const country_data:[] = [];
-
-const fs = require('fs')
+const country_data:country[] = [];
 
 fs.readFile('countrydata.txt', 'utf8' , (err, data) => {
   if (err) {
     console.error(err)
     return
   }
-  let re = ":"
-  let co = ","
-  let index:number=0;
-  if (data.search(re) == -1 ) {
-    console.log("Not Found" );
-  } else {
-    while(data.length > 0){
-      let country_name:string = data.substring(0,data.search(re));
-      let country_area:string = data.substring(data.search(re)+1,data.search(co));
-      country_name = country_name.replace("\r\n","");
-      country_area = country_area.replace("\r\n","");
-      let temp_country:country=[country_name, Number(country_area)];
-      country_data.push(temp_country);
-      data = data.substring(data.search(co)+1,data.length);
+
+
+  data = data.split("\r").join("");// Remove all \r and \n characters from the data
+  data = data.split("\n").join("");
+  while(data.length > 0){
+    let country_name:string = data.substring(0,data.search(":"));
+    let country_area:string = data.substring(data.search(":")+1, data.search(","));
+    while(country_name.at(0) == " "){ // If the first character in the country name is space then remove it
+      country_name = country_name.substring(1);
     }
-    console.log(country_data);
+
+    let temp_country:country=[country_name, Number(country_area)];
+
+    country_data.push(temp_country);
+    data = data.substring(data.search(",")+1, data.length);
+  }
+  for(var i = 0; i < country_data.length; i++){
+    console.log(country_data.at(i));
   }
 });
 type player_data = [number, string, string]; // Tuple of player score, name and room
