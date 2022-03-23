@@ -6,6 +6,69 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 const fs = require('fs')
 
+const country_data:country[] = [];
+const server_quiz = [
+  {
+      question: "What country is the largest by area?",
+      a: "Burundi",
+      b: "Brunei",
+      c: "Botswana",
+      correct: "c"
+  },
+  {
+      question: "What country is the largest by area?",
+      a: "Iraq",
+      b: "Italy",
+      c: "Nepal",
+      correct: "a"
+  },
+  {
+      question: "What country is the largest by area?",
+      a: "Kazakhstan",
+      b: "India",
+      c: "Chad",
+      correct: "b"
+  },
+  {
+    question: "What country is the largest by area?",
+    a: "Sweden",
+    b: "Norway",
+    c: "Denmark",
+    correct: "a"
+}
+];
+
+function make_quiz(){
+  for(let i = 0; i < 3; i++){
+    let option_a = country_data[Math.floor(Math.random() * (country_data.length + 1))];
+    let option_b = country_data[Math.floor(Math.random() * (country_data.length + 1))];
+    let option_c = country_data[Math.floor(Math.random() * (country_data.length + 1))];
+
+
+    let temp_question:quiz_question = ["What country is the largest by area?",
+    country_data[Math.floor(Math.random() * (country_data.length + 1))],
+    country_data[Math.floor(Math.random() * (country_data.length + 1))],
+    country_data[Math.floor(Math.random() * (country_data.length + 1))],
+  ];
+  };
+  Math.floor(Math.random() * (country_data.length + 1));
+};
+
+class quiz_question{
+    question:string;
+    a:string;
+    b:string;
+    c:string;
+    correct:string;
+  constructor(question = "No Question Set", a="No Option Set",b="No Option Set",c="No Option Set",correct="No Correct Option Set"){
+    this.question = question;
+    this.a = a;
+    this.b = b;
+    this.c = c;
+    this.correct = correct;
+  }
+}
+
 class country{
   name:string;
   total_area:number;
@@ -16,15 +79,13 @@ class country{
     this.population = population;
   }
 }
-const country_data:country[] = [];
+
 
 fs.readFile('countrydata.txt', 'utf8' , (err, data) => {
   if (err) {
     console.error(err)
     return
   }
-
-
   data = data.split("\r").join("");// Remove all \r and \n characters from the data
   data = data.split("\n").join("");
   while(data.length > 0){
@@ -39,9 +100,9 @@ fs.readFile('countrydata.txt', 'utf8' , (err, data) => {
     country_data.push(temp_country);
     data = data.substring(data.search(",")+1, data.length);
   }
-  for(var i = 0; i < country_data.length; i++){
-    console.log(country_data.at(i));
-  }
+  // for(var i = 0; i < country_data.length; i++){
+  //   console.log(country_data.at(i));
+  // }
 });
 type player_data = [number, string, string]; // Tuple of player score, name and room
 type scoreboard_data = [number, string]
@@ -81,6 +142,10 @@ io.on('connection', socket => {
         socket.join(room);
         io.to(all_players_data.get(socket.id)?.[2]).emit('user-connected',name);
       });   
+    socket.on('load-quiz', () => {
+        let quiz = server_quiz;
+        io.to(all_players_data.get(socket.id)?.[2]).emit('load-quiz',quiz);
+      });         
 });
 // setInterval(printUsers,2000);
 // function printUsers(){
