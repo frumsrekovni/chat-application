@@ -25,13 +25,22 @@ fs.readFile('countrydata.txt', 'utf8' , (err, data) => {
     return
   }
   let re = ":"
-  let temp_country:country=["my own",3212323,4443];
+  let co = ","
+  let index:number=0;
   if (data.search(re) == -1 ) {
     console.log("Not Found" );
   } else {
-    console.log(data.search(re));
+    while(data.length > 0){
+      let country_name:string = data.substring(0,data.search(re));
+      let country_area:string = data.substring(data.search(re)+1,data.search(co));
+      country_name = country_name.replace("\r\n","");
+      country_area = country_area.replace("\r\n","");
+      let temp_country:country=[country_name, Number(country_area)];
+      country_data.push(temp_country);
+      data = data.substring(data.search(co)+1,data.length);
+    }
+    console.log(country_data);
   }
-  //console.log(typeof(temp_country))
 });
 type player_data = [number, string, string]; // Tuple of player score, name and room
 type scoreboard_data = [number, string]
