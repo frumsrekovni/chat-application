@@ -37,48 +37,57 @@ const server_quiz = [
     correct: "a"
 }
 ];
-
-function make_quiz(){
-  for(let i = 0; i < 3; i++){
-    let option_a = country_data[Math.floor(Math.random() * (country_data.length + 1))];
-    let option_b = country_data[Math.floor(Math.random() * (country_data.length + 1))];
-    let option_c = country_data[Math.floor(Math.random() * (country_data.length + 1))];
-
-
-    let temp_question:quiz_question = ["What country is the largest by area?",
-    country_data[Math.floor(Math.random() * (country_data.length + 1))],
-    country_data[Math.floor(Math.random() * (country_data.length + 1))],
-    country_data[Math.floor(Math.random() * (country_data.length + 1))],
-  ];
-  };
-  Math.floor(Math.random() * (country_data.length + 1));
+class quiz_question{
+  question:string;
+  a:string;
+  b:string;
+  c:string;
+  correct:string;
+constructor(question = "No Question Set", a="No Option Set",b="No Option Set",c="No Option Set",correct="No Correct Option Set"){
+  this.question = question;
+  this.a = a;
+  this.b = b;
+  this.c = c;
+  this.correct = correct;
+}
 };
 
-class quiz_question{
-    question:string;
-    a:string;
-    b:string;
-    c:string;
-    correct:string;
-  constructor(question = "No Question Set", a="No Option Set",b="No Option Set",c="No Option Set",correct="No Correct Option Set"){
-    this.question = question;
-    this.a = a;
-    this.b = b;
-    this.c = c;
-    this.correct = correct;
-  }
-}
-
 class country{
-  name:string;
+  _name:string;
   total_area:number;
   population:number;
   constructor(name = "No Country", total_area=0,population=0){
-    this.name = name;
+    this._name = name;
     this.total_area = total_area;
     this.population = population;
-  }
-}
+    };
+    public get area() {
+      return this.total_area;
+    };
+    public get name() {
+      return this._name;
+    };
+};
+function make_quiz(){
+  for(let i = 0; i < 3; i++){
+    let option_a:country = country_data.at(Math.floor(Math.random() * (country_data.length + 1))) as country;
+    let testing:country = country_data.at(2);
+    console.log(testing);
+    let option_b:country = country_data.at(Math.floor(Math.random() * (country_data.length + 1))) as country;
+    let option_c:country = country_data.at(Math.floor(Math.random() * (country_data.length + 1))) as country;
+    let max:number = Math.max(option_a.total_area, option_b.total_area, option_c.total_area);
+    let correct_option:string = "No Correct Option Set";
+    if(option_a.area == max){
+      correct_option = "a";
+    } else if(option_b.area == max){
+      correct_option = "b";
+    } else{
+      correct_option = "c";
+    }
+    server_quiz.push(new quiz_question("What country is the largest by area?","Sweden","Sweden","Sweden",correct_option));
+  };
+  return server_quiz;
+};
 
 
 fs.readFile('countrydata.txt', 'utf8' , (err, data) => {
@@ -143,7 +152,7 @@ io.on('connection', socket => {
         io.to(all_players_data.get(socket.id)?.[2]).emit('user-connected',name);
       });   
     socket.on('load-quiz', () => {
-        let quiz = server_quiz;
+        let quiz = make_quiz();
         io.to(all_players_data.get(socket.id)?.[2]).emit('load-quiz',quiz);
       });         
 });
