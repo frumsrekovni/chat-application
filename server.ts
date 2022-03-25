@@ -6,37 +6,6 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 const fs = require('fs')
 
-const country_data:country[] = [];
-const server_quiz = [
-  {
-      question: "What country is the largest by area?",
-      a: "Burundi",
-      b: "Brunei",
-      c: "Botswana",
-      correct: "c"
-  },
-  {
-      question: "What country is the largest by area?",
-      a: "Iraq",
-      b: "Italy",
-      c: "Nepal",
-      correct: "a"
-  },
-  {
-      question: "What country is the largest by area?",
-      a: "Kazakhstan",
-      b: "India",
-      c: "Chad",
-      correct: "b"
-  },
-  {
-    question: "What country is the largest by area?",
-    a: "Sweden",
-    b: "Norway",
-    c: "Denmark",
-    correct: "a"
-}
-];
 class quiz_question{
   question:string;
   a:string;
@@ -68,13 +37,16 @@ class country{
       return this._name;
     };
 };
+
+const country_data:country[] = [];
+const server_quiz:quiz_question[] = [];
+
 function make_quiz(){
+  server_quiz.splice(0,server_quiz.length);
   for(let i = 0; i < 3; i++){
-    let option_a:country = country_data.at(Math.floor(Math.random() * (country_data.length + 1))) as country;
-    let testing:country = country_data.at(2);
-    console.log(testing);
-    let option_b:country = country_data.at(Math.floor(Math.random() * (country_data.length + 1))) as country;
-    let option_c:country = country_data.at(Math.floor(Math.random() * (country_data.length + 1))) as country;
+    let option_a:country = country_data.at(Math.floor(Math.random() * (country_data.length))) as country;
+    let option_b:country = country_data.at(Math.floor(Math.random() * (country_data.length))) as country;
+    let option_c:country = country_data.at(Math.floor(Math.random() * (country_data.length))) as country;
     let max:number = Math.max(option_a.total_area, option_b.total_area, option_c.total_area);
     let correct_option:string = "No Correct Option Set";
     if(option_a.area == max){
@@ -84,7 +56,7 @@ function make_quiz(){
     } else{
       correct_option = "c";
     }
-    server_quiz.push(new quiz_question("What country is the largest by area?","Sweden","Sweden","Sweden",correct_option));
+    server_quiz.push(new quiz_question("What country is the largest by area?",option_a.name,option_b.name,option_c.name,correct_option));
   };
   return server_quiz;
 };
@@ -104,9 +76,7 @@ fs.readFile('countrydata.txt', 'utf8' , (err, data) => {
       country_name = country_name.substring(1);
     }
 
-    let temp_country:country=[country_name, Number(country_area)];
-
-    country_data.push(temp_country);
+    country_data.push(new country(country_name, Number(country_area)));
     data = data.substring(data.search(",")+1, data.length);
   }
   // for(var i = 0; i < country_data.length; i++){
