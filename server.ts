@@ -43,7 +43,7 @@ const server_quiz:quiz_question[] = [];
 
 function make_quiz(){
   server_quiz.splice(0,server_quiz.length);
-  for(let i = 0; i < 3; i++){
+  for(let i = 0; i < 100; i++){
     let option_a:country = country_data.at(Math.floor(Math.random() * (country_data.length))) as country;
     let option_b:country = country_data.at(Math.floor(Math.random() * (country_data.length))) as country;
     let option_c:country = country_data.at(Math.floor(Math.random() * (country_data.length))) as country;
@@ -56,6 +56,8 @@ function make_quiz(){
     } else{
       correct_option = "c";
     }
+
+    //console.log(option_a.name, option_a.area, option_b.name, option_b.area, option_c.name, option_c.area, correct_option);
     server_quiz.push(new quiz_question("What country is the largest by area?",option_a.name,option_b.name,option_c.name,correct_option));
   };
   return server_quiz;
@@ -122,8 +124,7 @@ io.on('connection', socket => {
         io.to(all_players_data.get(socket.id)?.[2]).emit('user-connected',name);
       });   
     socket.on('load-quiz', () => {
-        let quiz = make_quiz();
-        io.to(all_players_data.get(socket.id)?.[2]).emit('load-quiz',quiz);
+        io.to(all_players_data.get(socket.id)?.[2]).emit('load-quiz',make_quiz());
       });         
 });
 // setInterval(printUsers,2000);

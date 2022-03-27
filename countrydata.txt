@@ -133,7 +133,7 @@ Guinea-Bissau:	36125,
 Armenia:	29743, 
 Solomon Islands:	28896,
 Albania:	28748,
-Equatorial: Guinea:	28051,
+Equatorial Guinea:	28051,
 
 
 Burundi:	27834,
