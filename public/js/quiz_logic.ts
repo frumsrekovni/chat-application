@@ -32,7 +32,7 @@ const questions = [
         a:"Spain",
         b:"Venezuela",
         c:"Morocco",
-        correct:"b"
+        correct:"a"
     }
 ];
 const quiz = document.getElementById("quiz_container");

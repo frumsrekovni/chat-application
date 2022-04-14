@@ -1,34 +1,63 @@
+
 body { 
-    background-color:purple;
+    background: rgb(31,30,30);
+    background: linear-gradient(45deg, rgba(31,30,30,1) 0%, rgba(48,48,46,1) 100%);
     margin: 0;
     padding-bottom: 3rem;
     font-family: Helvetica, Arial, sans-serif; 
 
 }
+h1{
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    font-size: 75px;
+    color: whitesmoke;
+    filter: drop-shadow(0.3rem 0.3rem 0.3rem rgb(0, 0, 0, 0.7));
+
+}
 .hero_body{
-    background-color: aqua;
+    background-color:whitesmoke;
     display: inline-flex;
     position: absolute;
-    top:30%;
-    left: 27%; 
-    width: 50vw;
-    
+    top:  35%;
+    left: 50%;
+    transform: translate(-50%,-50%); 
+    border-radius: 5px;
 }
 .container{
-    background-color: rgb(16, 124, 16);
-    width: 300px;
+    width: 30vw;
     position: relative;
+    border: 2px solid;
+    border-color:rgb(0, 0, 0);
+    margin: 2px;
 }
 .quiz_header li{
     list-style: none;
 }
 .current_room{
-    background-color: red;
+    background-color: rgb(236, 131, 11);
     position: absolute;
-    bottom: 0;
-    width: 100%;
     text-align: center;
-    padding: 1vh;
+    bottom: 0%;
+    left: 50%;
+    transform: translate(-50%,-50%); 
+    padding: 10px;
+    border-radius:10px;
+    border: 2px solid;
+    border-color:rgb(0, 0, 0);
+    transition: 400ms cubic-bezier(.14,.82,.7,.92);
+}
+#current_room_toggle{
+    display: none;
+}
+#current_room_toggle:checked + .current_room{
+    font-size: 0;
+    border-radius:50%;
+    width: 0%;
+}
+.current_room:hover{
+    border-color: white;
 }
 #chat_window{
     height: 25vh;
@@ -42,7 +71,6 @@ body {
     display: flex;
     height: 3rem;
     box-sizing: border-box;
-    backdrop-filter: blur(10px);
 }
 #input { 
     border: none; 
@@ -51,14 +79,44 @@ body {
     border-radius: 2rem; 
     margin: 0.25rem;
 }
-#input:focus { outline: none; }
-#form > button { background: #333; border: none; padding: 0 1rem; margin: 0.25rem; border-radius: 3px; outline: none; color: #fff; }
+button { 
+    background: rgb(206, 198, 198);
+    color: black; 
+    border: none; 
+    margin: 0.25rem;
+    padding: 0.5rem;
+    border-radius: 4px; 
+    outline: none;
+}
+button:hover{
+    color: rgb(206, 198, 198);
+    background: black; 
 
+}
 #messages { 
     max-height: 25vh;
     overflow-y: scroll;
     overflow-wrap: break-word;
-    list-style-type: none; margin: 0; padding: 0; 
+    list-style-type: none; 
+    margin: 0; 
+    padding: 0; 
 }
 #messages > li { padding: 0.5rem 1rem; }
 #messages > li:nth-child(odd) { background: #efefef; }
+
+@media (max-width: 900px) {
+    h1{
+        font-size: xx-large;
+    }
+    .current_room{
+    font-size: large;
+    width: 90%;
+    }
+    .hero_body{
+    flex-flow: column;
+    top:  50%;
+    }
+    .container{
+        width: 90vw;
+    }
+}

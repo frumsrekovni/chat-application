@@ -2,8 +2,8 @@ var socket = io();
 
 var form = document.getElementById('form');
 var input = document.getElementById('input');
-
-const questions = [
+let questions = [];
+const questions2 = [
     {
         question: "What country is the largest by area?",
         a: "Canada",
@@ -115,13 +115,15 @@ socket.on('scoreboard-update', input_scoreboard => {
         username.textContent = (element?.[1]+": "+element?.[0]);
         opponent_score.appendChild(username); 
     });
+socket.on('load-quiz', quiz => {
+    questions = quiz;
+    load_quiz();
+    });     
 }); 
 
 
 
 /* ##### QUIZ LOGIC ##### */
-
-//load_quiz();
 function load_quiz() {
     const cur_quiz_data = questions[cur_quiz];
     element_question.innerText = cur_quiz_data.question;
@@ -147,7 +149,7 @@ done_button.addEventListener("click", () => {
     if(!quiz_started){
         quiz_started = true;
         document.getElementById("done_button")?.innerText = "Next Question";
-        load_quiz();
+        socket.emit("load-quiz");
     }
     else{
         check_player_answer();

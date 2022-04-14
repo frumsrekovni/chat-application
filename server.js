@@ -54,7 +54,7 @@ var country_data = [];
 var server_quiz = [];
 function make_quiz() {
     server_quiz.splice(0, server_quiz.length);
-    for (var i = 0; i < 3; i++) {
+    for (var i = 0; i < 10; i++) {
         var option_a = country_data.at(Math.floor(Math.random() * (country_data.length)));
         var option_b = country_data.at(Math.floor(Math.random() * (country_data.length)));
         var option_c = country_data.at(Math.floor(Math.random() * (country_data.length)));
@@ -69,6 +69,7 @@ function make_quiz() {
         else {
             correct_option = "c";
         }
+        //console.log(option_a.name, option_a.area, option_b.name, option_b.area, option_c.name, option_c.area, correct_option);
         server_quiz.push(new quiz_question("What country is the largest by area?", option_a.name, option_b.name, option_c.name, correct_option));
     }
     ;
@@ -122,7 +123,7 @@ io.on('connection', function (socket) {
     socket.on('disconnect', function () {
         var _a, _b;
         io.to((_a = all_players_data.get(socket.id)) === null || _a === void 0 ? void 0 : _a[2]).emit('user-disconnected', (_b = all_players_data.get(socket.id)) === null || _b === void 0 ? void 0 : _b[1]);
-        all_players_data.delete(socket.id);
+        all_players_data["delete"](socket.id);
     });
     socket.on('new-user', function (_a) {
         var _b;
@@ -135,8 +136,7 @@ io.on('connection', function (socket) {
     });
     socket.on('load-quiz', function () {
         var _a;
-        var quiz = make_quiz();
-        io.to((_a = all_players_data.get(socket.id)) === null || _a === void 0 ? void 0 : _a[2]).emit('load-quiz', quiz);
+        io.to((_a = all_players_data.get(socket.id)) === null || _a === void 0 ? void 0 : _a[2]).emit('load-quiz', make_quiz());
     });
 });
 // setInterval(printUsers,2000);

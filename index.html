@@ -1,11 +1,17 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Socket.IO chat</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Battle</title>
     <link rel="stylesheet" href="/css/styles.css">
 
   </head>
   <body>
+    <h1>
+      Quiz Battle
+    </h1>
     <div class="hero_body">
       <div class="results">
         Current Scoreboard:
@@ -30,6 +36,7 @@
             </ul>
         </div>
         <button id="done_button">Start</button>
+
       </div>
   
       <div id="chat_window", class="container">
@@ -40,9 +47,12 @@
         </form>
       </div>
     </div>
-    <div class="current_room">
-      Current room code:<span></span>
-    </div>
+    <label>
+        <input id="current_room_toggle" type="checkbox">
+        <div class="current_room">
+          Current room code:<span></span>
+        </div>
+    </label>
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/testscript.js"></script>

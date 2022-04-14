@@ -43,7 +43,7 @@ const server_quiz:quiz_question[] = [];
 
 function make_quiz(){
   server_quiz.splice(0,server_quiz.length);
-  for(let i = 0; i < 100; i++){
+  for(let i = 0; i < 10; i++){
     let option_a:country = country_data.at(Math.floor(Math.random() * (country_data.length))) as country;
     let option_b:country = country_data.at(Math.floor(Math.random() * (country_data.length))) as country;
     let option_c:country = country_data.at(Math.floor(Math.random() * (country_data.length))) as country;
