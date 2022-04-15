@@ -132,6 +132,6 @@ io.on('connection', socket => {
 //   console.log(all_players_data);
 // }
 
-server.listen(3000, () => {
-  console.log('listening on *:3000');
+server.listen(process.env.PORT, () => {
+  //console.log('listening on *:3000');
 });

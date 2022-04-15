@@ -143,6 +143,6 @@ io.on('connection', function (socket) {
 // function printUsers(){
 //   console.log(all_players_data);
 // }
-server.listen(3000, function () {
-    console.log('listening on *:3000');
+server.listen(process.env.PORT, function () {
+    //console.log('listening on *:3000');
 });
