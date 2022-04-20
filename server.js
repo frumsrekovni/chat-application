@@ -5,6 +5,7 @@ var server = http.createServer(app);
 var Server = require("socket.io").Server;
 var io = new Server(server);
 var fs = require('fs');
+var number_of_questions_per_quiz = 100;
 var quiz_question = /** @class */ (function () {
     function quiz_question(question, a, b, c, correct) {
         if (question === void 0) { question = "No Question Set"; }
@@ -52,12 +53,29 @@ var country = /** @class */ (function () {
 ;
 var country_data = [];
 var server_quiz = [];
+function rnd_numbers_no_repeats() {
+    var arr_numbers = [];
+    for (var i = 0; i < 3; i++) {
+        var random_number = Math.floor(Math.random() * (country_data.length));
+        while (arr_numbers.includes(random_number)) {
+            random_number = Math.floor(Math.random() * (country_data.length));
+        }
+        arr_numbers.push(random_number);
+    }
+    return arr_numbers;
+}
 function make_quiz() {
     server_quiz.splice(0, server_quiz.length);
-    for (var i = 0; i < 10; i++) {
-        var option_a = country_data.at(Math.floor(Math.random() * (country_data.length)));
-        var option_b = country_data.at(Math.floor(Math.random() * (country_data.length)));
-        var option_c = country_data.at(Math.floor(Math.random() * (country_data.length)));
+    for (var i = 0; i < number_of_questions_per_quiz; i++) {
+        var rnd_question_number = rnd_numbers_no_repeats();
+        console.log("START OF 3 NEW RANDOM NUMBERS");
+        for (var index = 0; index < rnd_question_number.length; index++) {
+            var element = rnd_question_number[index];
+            console.log(element);
+        }
+        var option_a = country_data.at(rnd_question_number[0]);
+        var option_b = country_data.at(rnd_question_number[1]);
+        var option_c = country_data.at(rnd_question_number[2]);
         var max = Math.max(option_a.total_area, option_b.total_area, option_c.total_area);
         var correct_option = "No Correct Option Set";
         if (option_a.area == max) {
@@ -123,7 +141,7 @@ io.on('connection', function (socket) {
     socket.on('disconnect', function () {
         var _a, _b;
         io.to((_a = all_players_data.get(socket.id)) === null || _a === void 0 ? void 0 : _a[2]).emit('user-disconnected', (_b = all_players_data.get(socket.id)) === null || _b === void 0 ? void 0 : _b[1]);
-        all_players_data["delete"](socket.id);
+        all_players_data.delete(socket.id);
     });
     socket.on('new-user', function (_a) {
         var _b;
@@ -143,6 +161,9 @@ io.on('connection', function (socket) {
 // function printUsers(){
 //   console.log(all_players_data);
 // }
-server.listen(process.env.PORT, function () {
-    //console.log('listening on *:3000');
+// server.listen(process.env.PORT, () => {
+//   //console.log('listening on *:3000');
+// });
+server.listen(3000, function () {
+    console.log('listening on *:3000');
 });

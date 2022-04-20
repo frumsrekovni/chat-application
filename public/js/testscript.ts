@@ -3,50 +3,6 @@ var socket = io();
 var form = document.getElementById('form');
 var input = document.getElementById('input');
 let questions = [];
-const questions2 = [
-    {
-        question: "What country is the largest by area?",
-        a: "Canada",
-        b: "USA",
-        c: "China",
-        correct: "a"
-    },
-    {
-        question: "What country is the smallest by area?",
-        a: "Lesotho",
-        b: "Switzerland",
-        c: "Monaco",
-        correct: "c"
-    },
-    {
-        question: "What country is the most populous?",
-        a: "Bangladesh",
-        b: "Nigeria",
-        c: "Russia",
-        correct: "b"
-    },
-    {
-        question: "What country is the largest by area?",
-        a: "Sweden",
-        b: "Denmark",
-        c: "Norway",
-        correct: "b"
-    },
-    {
-        question: "What country is the most populous?",
-        a: "Spain",
-        b: "Venezuela",
-        c: "Morocco",
-        correct: "b"
-    },
-    {
-        question: "What country is closest to the equator?",
-        a: "Egypt",
-        b: "South Africa",
-        c: "Yemen",
-        correct: "c"
-    }
-];
 
 const quiz = document.getElementById("quiz_container");
 const player_answers = document.querySelectorAll('input[name="answer"]');

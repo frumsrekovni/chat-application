@@ -5,6 +5,7 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
 const fs = require('fs')
+const number_of_questions_per_quiz: number = 100;
 
 class quiz_question{
   question:string;
@@ -41,14 +42,30 @@ class country{
 const country_data:country[] = [];
 const server_quiz:quiz_question[] = [];
 
+function rnd_numbers_no_repeats(){
+  let arr_numbers: number[] = [];
+  for (let i = 0; i < 3; i++) {
+    let random_number = Math.floor(Math.random() * (country_data.length));
+    while(arr_numbers.includes(random_number)){
+      random_number = Math.floor(Math.random() * (country_data.length));
+    }
+    arr_numbers.push(random_number);
+  }
+  return arr_numbers;
+}
+
 function make_quiz(){
   server_quiz.splice(0,server_quiz.length);
-  for(let i = 0; i < 10; i++){
-    let option_a:country = country_data.at(Math.floor(Math.random() * (country_data.length))) as country;
-    let option_b:country = country_data.at(Math.floor(Math.random() * (country_data.length))) as country;
-    let option_c:country = country_data.at(Math.floor(Math.random() * (country_data.length))) as country;
+  for(let i = 0; i < number_of_questions_per_quiz; i++){
+
+    let rnd_question_number = rnd_numbers_no_repeats();
+    let option_a:country = country_data.at(rnd_question_number[0]) as country;
+    let option_b:country = country_data.at(rnd_question_number[1]) as country;
+    let option_c:country = country_data.at(rnd_question_number[2]) as country;
+
     let max:number = Math.max(option_a.total_area, option_b.total_area, option_c.total_area);
     let correct_option:string = "No Correct Option Set";
+
     if(option_a.area == max){
       correct_option = "a";
     } else if(option_b.area == max){
@@ -132,6 +149,10 @@ io.on('connection', socket => {
 //   console.log(all_players_data);
 // }
 
-server.listen(process.env.PORT, () => {
-  //console.log('listening on *:3000');
+// server.listen(process.env.PORT, () => {
+//   //console.log('listening on *:3000');
+// });
+
+server.listen(3000, () => {
+  console.log('listening on *:3000');
 });
