@@ -7,6 +7,33 @@ body {
     font-family: Helvetica, Arial, sans-serif; 
 
 }
+.made_by_bar{
+    position: absolute;
+    top: 0%;
+    background-color: rgb(209, 209, 209);
+    border-bottom-right-radius: 10px;
+    display: flex;
+}
+.made_by_bar span{
+    padding: 5px;
+    font-size: 16px;
+    color: gray;
+}
+.made_by_bar a img{
+    padding: 5px;
+    display: flex;
+    width: 16px;
+    height: auto;
+}
+.made_by_bar a img:last-child {
+    display: none;  
+}
+.made_by_bar a:hover img:first-child {
+    display: none;
+}
+.made_by_bar a:hover img:last-child {
+    display:flex;  
+}
 h1{
     width: 100%;
     text-align: center;

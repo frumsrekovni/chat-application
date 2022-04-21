@@ -5,7 +5,7 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
 const fs = require('fs')
-const number_of_questions_per_quiz: number = 100;
+const number_of_questions_per_quiz: number = 10;
 
 class quiz_question{
   question:string;

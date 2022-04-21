@@ -5,7 +5,7 @@ var server = http.createServer(app);
 var Server = require("socket.io").Server;
 var io = new Server(server);
 var fs = require('fs');
-var number_of_questions_per_quiz = 100;
+var number_of_questions_per_quiz = 10;
 var quiz_question = /** @class */ (function () {
     function quiz_question(question, a, b, c, correct) {
         if (question === void 0) { question = "No Question Set"; }
@@ -68,11 +68,6 @@ function make_quiz() {
     server_quiz.splice(0, server_quiz.length);
     for (var i = 0; i < number_of_questions_per_quiz; i++) {
         var rnd_question_number = rnd_numbers_no_repeats();
-        console.log("START OF 3 NEW RANDOM NUMBERS");
-        for (var index = 0; index < rnd_question_number.length; index++) {
-            var element = rnd_question_number[index];
-            console.log(element);
-        }
         var option_a = country_data.at(rnd_question_number[0]);
         var option_b = country_data.at(rnd_question_number[1]);
         var option_c = country_data.at(rnd_question_number[2]);
