@@ -2,50 +2,6 @@ var socket = io();
 var form = document.getElementById('form');
 var input = document.getElementById('input');
 var questions = [];
-var questions2 = [
-    {
-        question: "What country is the largest by area?",
-        a: "Canada",
-        b: "USA",
-        c: "China",
-        correct: "a"
-    },
-    {
-        question: "What country is the smallest by area?",
-        a: "Lesotho",
-        b: "Switzerland",
-        c: "Monaco",
-        correct: "c"
-    },
-    {
-        question: "What country is the most populous?",
-        a: "Bangladesh",
-        b: "Nigeria",
-        c: "Russia",
-        correct: "b"
-    },
-    {
-        question: "What country is the largest by area?",
-        a: "Sweden",
-        b: "Denmark",
-        c: "Norway",
-        correct: "b"
-    },
-    {
-        question: "What country is the most populous?",
-        a: "Spain",
-        b: "Venezuela",
-        c: "Morocco",
-        correct: "b"
-    },
-    {
-        question: "What country is closest to the equator?",
-        a: "Egypt",
-        b: "South Africa",
-        c: "Yemen",
-        correct: "c"
-    }
-];
 var quiz = document.getElementById("quiz_container");
 var player_answers = document.querySelectorAll('input[name="answer"]');
 var element_question = document.getElementById("the_question");
@@ -108,8 +64,11 @@ socket.on('scoreboard-update', function (input_scoreboard) {
         opponent_score.appendChild(username);
     });
     socket.on('load-quiz', function (quiz) {
+        var _a;
         questions = quiz;
         load_quiz();
+        quiz_started = true;
+        (_a = document.getElementById("done_button")) === null || _a === void 0 ? void 0 : _a.innerText = "Next Question";
     });
 });
 /* ##### QUIZ LOGIC ##### */

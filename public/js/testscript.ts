@@ -74,6 +74,8 @@ socket.on('scoreboard-update', input_scoreboard => {
 socket.on('load-quiz', quiz => {
     questions = quiz;
     load_quiz();
+    quiz_started = true;
+    document.getElementById("done_button")?.innerText = "Next Question";
     });     
 }); 
 
