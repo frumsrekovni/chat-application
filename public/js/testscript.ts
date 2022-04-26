@@ -76,6 +76,7 @@ socket.on('load-quiz', quiz => {
     load_quiz();
     quiz_started = true;
     document.getElementById("done_button")?.innerText = "Next Question";
+    document.getElementById("question_options")?.style.display = "block";
     });     
 }); 
 

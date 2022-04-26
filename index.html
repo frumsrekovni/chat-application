@@ -24,23 +24,30 @@
         Current Scoreboard:
         <ul id="opponent_score"></ul>
       </div>
+
       <div id="quiz_container", class="container">
         <div class="quiz_header">
             <div id="the_question">Press start when everyone has joined</div>
-            <ul>
-                <li>
-                    <input type="radio", id="a", name="answer">
-                    <label id="label_a", for="a"></label>
-                </li>
-                <li>
-                    <input type="radio", id="b", name="answer">
-                    <label id="label_b", for="b"></label>
-                </li>
-                <li>
-                    <input type="radio", id="c", name="answer">
-                    <label id="label_c", for="c"></label>
-                </li>
-            </ul>
+        </div>
+        <div id="question_options">
+          <li>
+            <input type="radio", id="a", name="answer">
+            <label id="label_a", for="a"></label>
+          </li>
+          <li>
+              <input type="radio", id="b", name="answer">
+              <label id="label_b", for="b"></label>
+          </li>
+          <li>
+              <input type="radio", id="c", name="answer">
+              <label id="label_c", for="c"></label>
+          </li>
+        </div>
+        <div class="lobby_settings">
+          <label for="questiontime">Seconds between questions:</label>
+
+          <input type="number" id="question_time_interval" name="questiontime"
+            min="1" max="100" value="5">
         </div>
         <button id="done_button">Start</button>
 

@@ -131,6 +131,11 @@ button:hover{
 #messages > li { padding: 0.5rem 1rem; }
 #messages > li:nth-child(odd) { background: #efefef; }
 
+#question_options{
+    display:none;
+}
+
+
 @media (max-width: 900px) {
     h1{
         font-size: xx-large;

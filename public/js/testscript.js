@@ -64,11 +64,12 @@ socket.on('scoreboard-update', function (input_scoreboard) {
         opponent_score.appendChild(username);
     });
     socket.on('load-quiz', function (quiz) {
-        var _a;
+        var _a, _b;
         questions = quiz;
         load_quiz();
         quiz_started = true;
         (_a = document.getElementById("done_button")) === null || _a === void 0 ? void 0 : _a.innerText = "Next Question";
+        (_b = document.getElementById("question_options")) === null || _b === void 0 ? void 0 : _b.style.display = "block";
     });
 });
 /* ##### QUIZ LOGIC ##### */
