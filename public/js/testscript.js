@@ -10,8 +10,12 @@ var question_label_b = document.getElementById("label_b");
 var question_label_c = document.getElementById("label_c");
 var done_button = document.getElementById("done_button");
 var current_room = document.querySelector(".current_room span");
+var quiz_timer = document.getElementById("quiz_timer");
 var cur_quiz = 0;
 var cur_score = 0;
+var max_quiz_timer = 0;
+var current_quiz_timer = 0;
+var interval;
 var quiz_started = false;
 var inserted_name = "Error: No name entered";
 var room_code = "Error: No room code entered";
@@ -70,6 +74,8 @@ socket.on('scoreboard-update', function (input_scoreboard) {
         quiz_started = true;
         (_a = document.getElementById("done_button")) === null || _a === void 0 ? void 0 : _a.innerText = "Next Question";
         (_b = document.getElementById("question_options")) === null || _b === void 0 ? void 0 : _b.style.display = "block";
+        max_quiz_timer = Number(document.getElementById("question_time_interval").value);
+        current_quiz_timer = max_quiz_timer;
     });
 });
 /* ##### QUIZ LOGIC ##### */
@@ -97,16 +103,29 @@ done_button.addEventListener("click", function () {
         quiz_started = true;
         (_a = document.getElementById("done_button")) === null || _a === void 0 ? void 0 : _a.innerText = "Next Question";
         socket.emit("load-quiz");
+        interval = setInterval(update_timer, 1000);
     }
     else {
         check_player_answer();
         cur_quiz++;
         if (cur_quiz < questions.length) {
             load_quiz();
+            current_quiz_timer = max_quiz_timer;
+            quiz_timer === null || quiz_timer === void 0 ? void 0 : quiz_timer.innerHTML = current_quiz_timer;
         }
         else {
+            clearInterval(interval);
             quiz.innerHTML = "<div>You got ".concat(cur_score, " out of ").concat(questions.length, " </div><button onclick=\"location.reload()\">Reload</button>");
         }
     }
 });
+function update_timer() {
+    var _a;
+    current_quiz_timer--;
+    quiz_timer === null || quiz_timer === void 0 ? void 0 : quiz_timer.innerHTML = current_quiz_timer;
+    if (current_quiz_timer <= 0) {
+        (_a = document.getElementById("done_button")) === null || _a === void 0 ? void 0 : _a.click(); // Continue to next question if timer runs out
+        current_quiz_timer = max_quiz_timer;
+    }
+}
 /* ##### END OF QUIZ LOGIC ##### */ 

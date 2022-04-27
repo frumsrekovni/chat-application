@@ -12,9 +12,12 @@ const question_label_b = document.getElementById("label_b");
 const question_label_c = document.getElementById("label_c");
 const done_button = document.getElementById("done_button");
 const current_room = document.querySelector(".current_room span");
+const quiz_timer = document.getElementById("quiz_timer");
 var cur_quiz = 0;
 var cur_score = 0;
-
+var max_quiz_timer:number = 0;
+var current_quiz_timer:number =0;
+let interval:NodeJS.Timer;
 let quiz_started:boolean = false;
 let inserted_name:string = "Error: No name entered";
 let room_code:string = "Error: No room code entered";
@@ -77,6 +80,8 @@ socket.on('load-quiz', quiz => {
     quiz_started = true;
     document.getElementById("done_button")?.innerText = "Next Question";
     document.getElementById("question_options")?.style.display = "block";
+    max_quiz_timer = Number((document.getElementById("question_time_interval") as HTMLInputElement).value)
+    current_quiz_timer = max_quiz_timer;
     });     
 }); 
 
@@ -104,22 +109,33 @@ function check_player_answer() {
     });
 }
 done_button.addEventListener("click", () => {
-
+    
     if(!quiz_started){
         quiz_started = true;
         document.getElementById("done_button")?.innerText = "Next Question";
         socket.emit("load-quiz");
+        interval = setInterval(update_timer, 1000);
     }
     else{
         check_player_answer();
         cur_quiz++;
         if (cur_quiz < questions.length) {
             load_quiz();
+            current_quiz_timer = max_quiz_timer;
+            quiz_timer?.innerHTML = current_quiz_timer;
         }
         else {
+            clearInterval(interval);
             quiz.innerHTML = `<div>You got ${cur_score} out of ${questions.length} </div><button onclick="location.reload()">Reload</button>`;
         }
     }
 });
-
+function update_timer(){
+    current_quiz_timer--;
+    quiz_timer?.innerHTML = current_quiz_timer;
+    if(current_quiz_timer <= 0){
+        document.getElementById("done_button")?.click(); // Continue to next question if timer runs out
+        current_quiz_timer = max_quiz_timer;
+    }
+}
 /* ##### END OF QUIZ LOGIC ##### */
