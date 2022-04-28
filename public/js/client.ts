@@ -74,12 +74,13 @@ socket.on('scoreboard-update', input_scoreboard => {
         username.textContent = (element?.[1]+": "+element?.[0]);
         opponent_score.appendChild(username); 
     });
-socket.on('load-quiz', ({ made_quiz, time}) => {
+socket.on('load-quiz', ({made_quiz, time}) => {
     questions = made_quiz;
     load_quiz();
     quiz_started = true;
     document.getElementById("done_button")?.innerText = "Next Question";
     document.getElementById("question_options")?.style.display = "block";
+    document.getElementById("lobby_settings")?.style.display = "none";
     max_quiz_timer = time;
     current_quiz_timer = max_quiz_timer;
     clearInterval(interval); // This needs to happen since this load-quiz function can be run more than once depending on the network

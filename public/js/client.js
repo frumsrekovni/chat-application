@@ -68,13 +68,14 @@ socket.on('scoreboard-update', function (input_scoreboard) {
         opponent_score.appendChild(username);
     });
     socket.on('load-quiz', function (_a) {
-        var _b, _c;
+        var _b, _c, _d;
         var made_quiz = _a.made_quiz, time = _a.time;
         questions = made_quiz;
         load_quiz();
         quiz_started = true;
         (_b = document.getElementById("done_button")) === null || _b === void 0 ? void 0 : _b.innerText = "Next Question";
         (_c = document.getElementById("question_options")) === null || _c === void 0 ? void 0 : _c.style.display = "block";
+        (_d = document.getElementById("lobby_settings")) === null || _d === void 0 ? void 0 : _d.style.display = "none";
         max_quiz_timer = time;
         current_quiz_timer = max_quiz_timer;
         clearInterval(interval); // This needs to happen since this load-quiz function can be run more than once depending on the network
