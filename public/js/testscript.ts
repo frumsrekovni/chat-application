@@ -74,14 +74,17 @@ socket.on('scoreboard-update', input_scoreboard => {
         username.textContent = (element?.[1]+": "+element?.[0]);
         opponent_score.appendChild(username); 
     });
-socket.on('load-quiz', quiz => {
-    questions = quiz;
+socket.on('load-quiz', ({ made_quiz, time}) => {
+    questions = made_quiz;
     load_quiz();
     quiz_started = true;
     document.getElementById("done_button")?.innerText = "Next Question";
     document.getElementById("question_options")?.style.display = "block";
-    max_quiz_timer = Number((document.getElementById("question_time_interval") as HTMLInputElement).value)
+    max_quiz_timer = time;
     current_quiz_timer = max_quiz_timer;
+    clearInterval(interval); // This needs to happen since this load-quiz function can be run more than once depending on the network
+    interval = setInterval(update_timer, 1000); // Start the timer and so it updates every 1000ms
+    console.log("I am now RECEIVING a load quiz");
     });     
 }); 
 
@@ -113,8 +116,10 @@ done_button.addEventListener("click", () => {
     if(!quiz_started){
         quiz_started = true;
         document.getElementById("done_button")?.innerText = "Next Question";
-        socket.emit("load-quiz");
-        interval = setInterval(update_timer, 1000);
+        // When clicking start. The chosen parameters are sent to everyone in the same room
+        socket.emit("load-quiz",
+        {number_of_questions:Number((document.getElementById("question_amount") as HTMLInputElement).value),
+        time_between_questions:Number((document.getElementById("question_time_interval") as HTMLInputElement).value)});
     }
     else{
         check_player_answer();

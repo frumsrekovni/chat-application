@@ -54,9 +54,9 @@ function rnd_numbers_no_repeats(){
   return arr_numbers;
 }
 
-function make_quiz(){
+function make_quiz(amount_of_questions: number = 3){
   server_quiz.splice(0,server_quiz.length);
-  for(let i = 0; i < number_of_questions_per_quiz; i++){
+  for(let i = 0; i < amount_of_questions; i++){
 
     let rnd_question_number = rnd_numbers_no_repeats();
     let option_a:country = country_data.at(rnd_question_number[0]) as country;
@@ -140,8 +140,9 @@ io.on('connection', socket => {
         socket.join(room);
         io.to(all_players_data.get(socket.id)?.[2]).emit('user-connected',name);
       });   
-    socket.on('load-quiz', () => {
-        io.to(all_players_data.get(socket.id)?.[2]).emit('load-quiz',make_quiz());
+    socket.on('load-quiz', ({number_of_questions, time_between_questions}) => {
+        io.to(all_players_data.get(socket.id)?.[2]).emit('load-quiz',
+        {made_quiz:make_quiz(number_of_questions),time:time_between_questions});
       });         
 });
 // setInterval(printUsers,2000);

@@ -134,6 +134,9 @@ button:hover{
 #question_options{
     display:none;
 }
+.question_timer{
+    
+}
 
 
 @media (max-width: 900px) {

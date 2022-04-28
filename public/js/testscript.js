@@ -67,15 +67,19 @@ socket.on('scoreboard-update', function (input_scoreboard) {
         username.textContent = ((element === null || element === void 0 ? void 0 : element[1]) + ": " + (element === null || element === void 0 ? void 0 : element[0]));
         opponent_score.appendChild(username);
     });
-    socket.on('load-quiz', function (quiz) {
-        var _a, _b;
-        questions = quiz;
+    socket.on('load-quiz', function (_a) {
+        var _b, _c;
+        var made_quiz = _a.made_quiz, time = _a.time;
+        questions = made_quiz;
         load_quiz();
         quiz_started = true;
-        (_a = document.getElementById("done_button")) === null || _a === void 0 ? void 0 : _a.innerText = "Next Question";
-        (_b = document.getElementById("question_options")) === null || _b === void 0 ? void 0 : _b.style.display = "block";
-        max_quiz_timer = Number(document.getElementById("question_time_interval").value);
+        (_b = document.getElementById("done_button")) === null || _b === void 0 ? void 0 : _b.innerText = "Next Question";
+        (_c = document.getElementById("question_options")) === null || _c === void 0 ? void 0 : _c.style.display = "block";
+        max_quiz_timer = time;
         current_quiz_timer = max_quiz_timer;
+        clearInterval(interval); // This needs to happen since this load-quiz function can be run more than once depending on the network
+        interval = setInterval(update_timer, 1000); // Start the timer and so it updates every 1000ms
+        console.log("I am now RECEIVING a load quiz");
     });
 });
 /* ##### QUIZ LOGIC ##### */
@@ -102,8 +106,9 @@ done_button.addEventListener("click", function () {
     if (!quiz_started) {
         quiz_started = true;
         (_a = document.getElementById("done_button")) === null || _a === void 0 ? void 0 : _a.innerText = "Next Question";
-        socket.emit("load-quiz");
-        interval = setInterval(update_timer, 1000);
+        // When clicking start. The chosen parameters are sent to everyone in the same room
+        socket.emit("load-quiz", { number_of_questions: Number(document.getElementById("question_amount").value),
+            time_between_questions: Number(document.getElementById("question_time_interval").value) });
     }
     else {
         check_player_answer();

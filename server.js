@@ -64,9 +64,10 @@ function rnd_numbers_no_repeats() {
     }
     return arr_numbers;
 }
-function make_quiz() {
+function make_quiz(amount_of_questions) {
+    if (amount_of_questions === void 0) { amount_of_questions = 3; }
     server_quiz.splice(0, server_quiz.length);
-    for (var i = 0; i < number_of_questions_per_quiz; i++) {
+    for (var i = 0; i < amount_of_questions; i++) {
         var rnd_question_number = rnd_numbers_no_repeats();
         var option_a = country_data.at(rnd_question_number[0]);
         var option_b = country_data.at(rnd_question_number[1]);
@@ -147,9 +148,10 @@ io.on('connection', function (socket) {
         socket.join(room);
         io.to((_b = all_players_data.get(socket.id)) === null || _b === void 0 ? void 0 : _b[2]).emit('user-connected', name);
     });
-    socket.on('load-quiz', function () {
-        var _a;
-        io.to((_a = all_players_data.get(socket.id)) === null || _a === void 0 ? void 0 : _a[2]).emit('load-quiz', make_quiz());
+    socket.on('load-quiz', function (_a) {
+        var _b;
+        var number_of_questions = _a.number_of_questions, time_between_questions = _a.time_between_questions;
+        io.to((_b = all_players_data.get(socket.id)) === null || _b === void 0 ? void 0 : _b[2]).emit('load-quiz', { made_quiz: make_quiz(number_of_questions), time: time_between_questions });
     });
 });
 // setInterval(printUsers,2000);
