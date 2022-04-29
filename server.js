@@ -5,7 +5,6 @@ var server = http.createServer(app);
 var Server = require("socket.io").Server;
 var io = new Server(server);
 var fs = require('fs');
-var number_of_questions_per_quiz = 10;
 var quiz_question = /** @class */ (function () {
     function quiz_question(question, a, b, c, correct) {
         if (question === void 0) { question = "No Question Set"; }
@@ -52,6 +51,7 @@ var country = /** @class */ (function () {
 }());
 ;
 var country_data = [];
+var country_population = [];
 var server_quiz = [];
 function rnd_numbers_no_repeats() {
     var arr_numbers = [];
@@ -99,16 +99,18 @@ fs.readFile('countrydata.txt', 'utf8', function (err, data) {
     data = data.split("\n").join("");
     while (data.length > 0) {
         var country_name = data.substring(0, data.search(":"));
-        var country_area = data.substring(data.search(":") + 1, data.search(","));
+        data = data.substring(data.search(":") + 1, data.length);
+        var country_area = data.substring(0, data.search(":"));
+        var country_population_1 = data.substring(data.search(":") + 1, data.search(","));
         while (country_name.at(0) == " ") { // If the first character in the country name is space then remove it
             country_name = country_name.substring(1);
         }
-        country_data.push(new country(country_name, Number(country_area)));
+        country_data.push(new country(country_name, Number(country_area), Number(country_population_1)));
         data = data.substring(data.search(",") + 1, data.length);
     }
-    // for(var i = 0; i < country_data.length; i++){
-    //   console.log(country_data.at(i));
-    // }
+    for (var i = 0; i < country_data.length; i++) {
+        console.log(country_data.at(i));
+    }
 });
 var all_players_data = new Map();
 app.use(express.static(__dirname + '/public'));
@@ -158,9 +160,9 @@ io.on('connection', function (socket) {
 // function printUsers(){
 //   console.log(all_players_data);
 // }
-server.listen(process.env.PORT, function () {
-    //console.log('listening on *:3000');
-});
-// server.listen(3000, () => {
-//   console.log('listening on *:3000');
+// server.listen(process.env.PORT, () => {
+//   //console.log('listening on *:3000');
 // });
+server.listen(3000, function () {
+    console.log('listening on *:3000');
+});

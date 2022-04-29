@@ -5,7 +5,6 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
 const fs = require('fs')
-const number_of_questions_per_quiz: number = 10;
 
 class quiz_question{
   question:string;
@@ -40,6 +39,7 @@ class country{
 };
 
 const country_data:country[] = [];
+const country_population:country[] = [];
 const server_quiz:quiz_question[] = [];
 
 function rnd_numbers_no_repeats(){
@@ -90,17 +90,19 @@ fs.readFile('countrydata.txt', 'utf8' , (err, data) => {
   data = data.split("\n").join("");
   while(data.length > 0){
     let country_name:string = data.substring(0,data.search(":"));
-    let country_area:string = data.substring(data.search(":")+1, data.search(","));
+    data = data.substring(data.search(":")+1, data.length);
+    let country_area:string = data.substring(0, data.search(":"));
+    let country_population:string = data.substring(data.search(":")+1, data.search(","));
     while(country_name.at(0) == " "){ // If the first character in the country name is space then remove it
       country_name = country_name.substring(1);
     }
-
-    country_data.push(new country(country_name, Number(country_area)));
+    
+    country_data.push(new country(country_name, Number(country_area), Number(country_population)));
     data = data.substring(data.search(",")+1, data.length);
   }
-  // for(var i = 0; i < country_data.length; i++){
-  //   console.log(country_data.at(i));
-  // }
+  for(var i = 0; i < country_data.length; i++){
+    console.log(country_data.at(i));
+  }
 });
 type player_data = [number, string, string]; // Tuple of player score, name and room
 type scoreboard_data = [number, string]
@@ -150,10 +152,10 @@ io.on('connection', socket => {
 //   console.log(all_players_data);
 // }
 
-server.listen(process.env.PORT, () => {
-  //console.log('listening on *:3000');
-});
-
-// server.listen(3000, () => {
-//   console.log('listening on *:3000');
+// server.listen(process.env.PORT, () => {
+//   //console.log('listening on *:3000');
 // });
+
+server.listen(3000, () => {
+  console.log('listening on *:3000');
+});
