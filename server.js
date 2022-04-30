@@ -53,38 +53,48 @@ var country = /** @class */ (function () {
 var country_data = [];
 var country_population = [];
 var server_quiz = [];
-function rnd_numbers_no_repeats() {
+function rnd_numbers_no_repeats(len) {
     var arr_numbers = [];
     for (var i = 0; i < 3; i++) {
-        var random_number = Math.floor(Math.random() * (country_data.length));
+        var random_number = Math.floor(Math.random() * (len));
         while (arr_numbers.includes(random_number)) {
-            random_number = Math.floor(Math.random() * (country_data.length));
+            random_number = Math.floor(Math.random() * (len));
         }
         arr_numbers.push(random_number);
     }
     return arr_numbers;
 }
+function get_correct_option(number1, number2, number3) {
+    var max = Math.max(number1, number2, number3);
+    var correct_option = "No Correct Option Set";
+    if (number1 == max) {
+        correct_option = "a";
+    }
+    else if (number2 == max) {
+        correct_option = "b";
+    }
+    else {
+        correct_option = "c";
+    }
+    // console.log(number1,number2,number3,correct_option);
+    return correct_option;
+}
 function make_quiz(amount_of_questions) {
     if (amount_of_questions === void 0) { amount_of_questions = 3; }
     server_quiz.splice(0, server_quiz.length);
     for (var i = 0; i < amount_of_questions; i++) {
-        var rnd_question_number = rnd_numbers_no_repeats();
+        var rnd_question_number = rnd_numbers_no_repeats(country_data.length);
         var option_a = country_data.at(rnd_question_number[0]);
         var option_b = country_data.at(rnd_question_number[1]);
         var option_c = country_data.at(rnd_question_number[2]);
-        var max = Math.max(option_a.total_area, option_b.total_area, option_c.total_area);
-        var correct_option = "No Correct Option Set";
-        if (option_a.area == max) {
-            correct_option = "a";
-        }
-        else if (option_b.area == max) {
-            correct_option = "b";
+        // Flip a coin on how many of each question type
+        var coinflip = Math.floor((Math.random() * 2));
+        if (coinflip == 1) {
+            server_quiz.push(new quiz_question("What country has the largest AREA?", option_a.name, option_b.name, option_c.name, get_correct_option(option_a.area, option_b.area, option_c.area)));
         }
         else {
-            correct_option = "c";
+            server_quiz.push(new quiz_question("What country has the largest POPULATION?", option_a.name, option_b.name, option_c.name, get_correct_option(option_a.population, option_b.population, option_c.population)));
         }
-        //console.log(option_a.name, option_a.area, option_b.name, option_b.area, option_c.name, option_c.area, correct_option);
-        server_quiz.push(new quiz_question("What country is the largest by area?", option_a.name, option_b.name, option_c.name, correct_option));
     }
     ;
     return server_quiz;
@@ -108,9 +118,9 @@ fs.readFile('countrydata.txt', 'utf8', function (err, data) {
         country_data.push(new country(country_name, Number(country_area), Number(country_population_1)));
         data = data.substring(data.search(",") + 1, data.length);
     }
-    for (var i = 0; i < country_data.length; i++) {
-        console.log(country_data.at(i));
-    }
+    // for(var i = 0; i < country_data.length; i++){
+    //   console.log(country_data.at(i));
+    // }
 });
 var all_players_data = new Map();
 app.use(express.static(__dirname + '/public'));
