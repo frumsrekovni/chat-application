@@ -114,11 +114,19 @@ button {
     padding: 0.5rem;
     border-radius: 4px; 
     outline: none;
+    display: flex;
 }
 button:hover{
     color: rgb(206, 198, 198);
     background: black; 
 
+}
+#rematch_button{
+    display: none;
+}
+#quiz_timer{
+    font-size: xx-large;
+    padding: 1rem;
 }
 #messages { 
     max-height: 25vh;

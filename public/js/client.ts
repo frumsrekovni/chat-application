@@ -10,7 +10,10 @@ const element_question = document.getElementById("the_question");
 const question_label_a = document.getElementById("label_a");
 const question_label_b = document.getElementById("label_b");
 const question_label_c = document.getElementById("label_c");
+const question_options = document.getElementById("question_options");
+const lobby_settings = document.getElementById("lobby_settings");
 const done_button = document.getElementById("done_button");
+const rematch_button = document.getElementById("rematch_button");
 const current_room = document.querySelector(".current_room span");
 const quiz_timer = document.getElementById("quiz_timer");
 let cur_quiz:number = 0;
@@ -78,9 +81,13 @@ socket.on('load-quiz', ({made_quiz, time}) => {
     questions = made_quiz;
     load_quiz();
     quiz_started = true;
-    document.getElementById("done_button")?.innerText = "Next Question";
-    document.getElementById("question_options")?.style.display = "block";
-    document.getElementById("lobby_settings")?.style.display = "none";
+    cur_quiz = 0;
+    cur_score = 0;
+    rematch_button?.style.display = "none";
+    done_button?.innerText = "Next Question";
+    done_button?.style.display = "flex";
+    question_options?.style.display = "block";
+    lobby_settings?.style.display = "none";
     max_quiz_timer = time;
     current_quiz_timer = max_quiz_timer;
     clearInterval(interval); // This needs to happen since this load-quiz function can be run more than once depending on the network
@@ -94,10 +101,17 @@ socket.on('load-quiz', ({made_quiz, time}) => {
 /* ##### QUIZ LOGIC ##### */
 function load_quiz() {
     const cur_quiz_data = questions[cur_quiz];
-    element_question.innerText = cur_quiz_data.question;
-    question_label_a.innerText = cur_quiz_data.a;
-    question_label_b.innerText = cur_quiz_data.b;
-    question_label_c.innerText = cur_quiz_data.c;
+    if(cur_quiz_data == undefined){
+        socket.emit("load-quiz",
+        {number_of_questions:Number((document.getElementById("question_amount") as HTMLInputElement).value),
+        time_between_questions:Number((document.getElementById("question_time_interval") as HTMLInputElement).value)});
+    }
+    else{
+        element_question.innerText = cur_quiz_data.question;
+        question_label_a.innerText = cur_quiz_data.a;
+        question_label_b.innerText = cur_quiz_data.b;
+        question_label_c.innerText = cur_quiz_data.c;
+    }
 }
 function check_player_answer() {
     player_answers.forEach((answer) => {
@@ -115,8 +129,6 @@ function check_player_answer() {
 done_button.addEventListener("click", () => {
     
     if(!quiz_started){
-        quiz_started = true;
-        document.getElementById("done_button")?.innerText = "Next Question";
         // When clicking start. The chosen parameters are sent to everyone in the same room
         socket.emit("load-quiz",
         {number_of_questions:Number((document.getElementById("question_amount") as HTMLInputElement).value),
@@ -125,16 +137,28 @@ done_button.addEventListener("click", () => {
     else{
         check_player_answer();
         cur_quiz++;
+        
         if (cur_quiz < questions.length) {
-            load_quiz();
+            load_quiz(); // This loads the next question
             current_quiz_timer = max_quiz_timer;
             quiz_timer?.innerHTML = current_quiz_timer;
         }
         else {
-            clearInterval(interval);
-            quiz.innerHTML = `<div>You got ${cur_score} out of ${questions.length} </div><button onclick="location.reload()">Reload</button>`;
+            quiz_started = false;
+            clearInterval(interval); // Stop the countdown timer
+            //quiz.innerHTML = `<div>You got ${cur_score} out of ${questions.length} </div><button onclick="location.reload()">Reload</button>`;
+            element_question?.innerText = "You got "+cur_score+" out of "+questions.length;
+            done_button?.style.display = "none";
+            question_options?.style.display = "none";
+            rematch_button?.style.display = "flex";
+            lobby_settings?.style.display = "block";
         }
     }
+});
+rematch_button.addEventListener("click", () => {
+    socket.emit("load-quiz",
+    {number_of_questions:Number((document.getElementById("question_amount") as HTMLInputElement).value),
+    time_between_questions:Number((document.getElementById("question_time_interval") as HTMLInputElement).value)});
 });
 function update_timer(){
     current_quiz_timer--;

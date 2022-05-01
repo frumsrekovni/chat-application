@@ -8,7 +8,10 @@ var element_question = document.getElementById("the_question");
 var question_label_a = document.getElementById("label_a");
 var question_label_b = document.getElementById("label_b");
 var question_label_c = document.getElementById("label_c");
+var question_options = document.getElementById("question_options");
+var lobby_settings = document.getElementById("lobby_settings");
 var done_button = document.getElementById("done_button");
+var rematch_button = document.getElementById("rematch_button");
 var current_room = document.querySelector(".current_room span");
 var quiz_timer = document.getElementById("quiz_timer");
 var cur_quiz = 0;
@@ -68,14 +71,17 @@ socket.on('scoreboard-update', function (input_scoreboard) {
         opponent_score.appendChild(username);
     });
     socket.on('load-quiz', function (_a) {
-        var _b, _c, _d;
         var made_quiz = _a.made_quiz, time = _a.time;
         questions = made_quiz;
         load_quiz();
         quiz_started = true;
-        (_b = document.getElementById("done_button")) === null || _b === void 0 ? void 0 : _b.innerText = "Next Question";
-        (_c = document.getElementById("question_options")) === null || _c === void 0 ? void 0 : _c.style.display = "block";
-        (_d = document.getElementById("lobby_settings")) === null || _d === void 0 ? void 0 : _d.style.display = "none";
+        cur_quiz = 0;
+        cur_score = 0;
+        rematch_button === null || rematch_button === void 0 ? void 0 : rematch_button.style.display = "none";
+        done_button === null || done_button === void 0 ? void 0 : done_button.innerText = "Next Question";
+        done_button === null || done_button === void 0 ? void 0 : done_button.style.display = "flex";
+        question_options === null || question_options === void 0 ? void 0 : question_options.style.display = "block";
+        lobby_settings === null || lobby_settings === void 0 ? void 0 : lobby_settings.style.display = "none";
         max_quiz_timer = time;
         current_quiz_timer = max_quiz_timer;
         clearInterval(interval); // This needs to happen since this load-quiz function can be run more than once depending on the network
@@ -86,10 +92,16 @@ socket.on('scoreboard-update', function (input_scoreboard) {
 /* ##### QUIZ LOGIC ##### */
 function load_quiz() {
     var cur_quiz_data = questions[cur_quiz];
-    element_question.innerText = cur_quiz_data.question;
-    question_label_a.innerText = cur_quiz_data.a;
-    question_label_b.innerText = cur_quiz_data.b;
-    question_label_c.innerText = cur_quiz_data.c;
+    if (cur_quiz_data == undefined) {
+        socket.emit("load-quiz", { number_of_questions: Number(document.getElementById("question_amount").value),
+            time_between_questions: Number(document.getElementById("question_time_interval").value) });
+    }
+    else {
+        element_question.innerText = cur_quiz_data.question;
+        question_label_a.innerText = cur_quiz_data.a;
+        question_label_b.innerText = cur_quiz_data.b;
+        question_label_c.innerText = cur_quiz_data.c;
+    }
 }
 function check_player_answer() {
     player_answers.forEach(function (answer) {
@@ -103,10 +115,7 @@ function check_player_answer() {
     });
 }
 done_button.addEventListener("click", function () {
-    var _a;
     if (!quiz_started) {
-        quiz_started = true;
-        (_a = document.getElementById("done_button")) === null || _a === void 0 ? void 0 : _a.innerText = "Next Question";
         // When clicking start. The chosen parameters are sent to everyone in the same room
         socket.emit("load-quiz", { number_of_questions: Number(document.getElementById("question_amount").value),
             time_between_questions: Number(document.getElementById("question_time_interval").value) });
@@ -115,15 +124,25 @@ done_button.addEventListener("click", function () {
         check_player_answer();
         cur_quiz++;
         if (cur_quiz < questions.length) {
-            load_quiz();
+            load_quiz(); // This loads the next question
             current_quiz_timer = max_quiz_timer;
             quiz_timer === null || quiz_timer === void 0 ? void 0 : quiz_timer.innerHTML = current_quiz_timer;
         }
         else {
-            clearInterval(interval);
-            quiz.innerHTML = "<div>You got ".concat(cur_score, " out of ").concat(questions.length, " </div><button onclick=\"location.reload()\">Reload</button>");
+            quiz_started = false;
+            clearInterval(interval); // Stop the countdown timer
+            //quiz.innerHTML = `<div>You got ${cur_score} out of ${questions.length} </div><button onclick="location.reload()">Reload</button>`;
+            element_question === null || element_question === void 0 ? void 0 : element_question.innerText = "You got " + cur_score + " out of " + questions.length;
+            done_button === null || done_button === void 0 ? void 0 : done_button.style.display = "none";
+            question_options === null || question_options === void 0 ? void 0 : question_options.style.display = "none";
+            rematch_button === null || rematch_button === void 0 ? void 0 : rematch_button.style.display = "flex";
+            lobby_settings === null || lobby_settings === void 0 ? void 0 : lobby_settings.style.display = "block";
         }
     }
+});
+rematch_button.addEventListener("click", function () {
+    socket.emit("load-quiz", { number_of_questions: Number(document.getElementById("question_amount").value),
+        time_between_questions: Number(document.getElementById("question_time_interval").value) });
 });
 function update_timer() {
     var _a;
