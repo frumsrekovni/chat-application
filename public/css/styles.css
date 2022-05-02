@@ -1,7 +1,8 @@
 
 body { 
-    background: rgb(31,30,30);
-    background: linear-gradient(45deg, rgba(31,30,30,1) 0%, rgba(48,48,46,1) 100%);
+    background: #060CE9;
+    /* background: linear-gradient(45deg, rgba(31,30,30,1) 0%, rgba(48,48,46,1) 100%); */
+    background: radial-gradient(circle, rgba(233,139,6,1) 0%, rgba(6,12,233,1) 100%);
     margin: 0;
     padding-bottom: 3rem;
     font-family: Helvetica, Arial, sans-serif; 
@@ -57,7 +58,8 @@ h1{
     position: relative;
     border: 2px solid;
     border-color:rgb(0, 0, 0);
-    margin: 2px;
+    margin: 2rem 1rem 2rem 1rem;
+    padding: 1rem;
 }
 .quiz_header li{
     list-style: none;
@@ -115,12 +117,32 @@ button {
     border-radius: 4px; 
     outline: none;
     display: flex;
+    cursor: pointer;
 }
 button:hover{
     color: rgb(206, 198, 198);
     background: black; 
 
 }
+.login_container{
+    position: absolute;
+    background-color: whitesmoke;
+    display: flex;
+    flex-direction:column;
+    top:  50%;
+    left: 50%;
+    transform: translate(-50%,-50%); 
+    border-radius: 2px;
+    z-index: 1;
+}
+input[type=text], input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+  }
 #rematch_button{
     display: none;
 }
@@ -141,9 +163,6 @@ button:hover{
 
 #question_options{
     display:none;
-}
-.question_timer{
-    
 }
 
 
