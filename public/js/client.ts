@@ -14,6 +14,7 @@ const question_options = document.getElementById("question_options");
 const lobby_settings = document.getElementById("lobby_settings");
 const done_button = document.getElementById("done_button");
 const rematch_button = document.getElementById("rematch_button");
+const submit_button = document.getElementById("submit_button");
 const current_room = document.querySelector(".current_room span");
 const quiz_timer = document.getElementById("quiz_timer");
 let cur_quiz:number = 0;
@@ -25,6 +26,7 @@ let quiz_started:boolean = false;
 let inserted_name:string = "Error: No name entered";
 let room_code:string = "Error: No room code entered";
 do{
+    document.getElementById("question_amount") as HTMLInputElement).value
     inserted_name = prompt('What username do you want?');
     room_code = prompt('What room code do you want to join/create?'); 
 } while(inserted_name === "" || room_code === "")
@@ -159,6 +161,9 @@ rematch_button.addEventListener("click", () => {
     socket.emit("load-quiz",
     {number_of_questions:Number((document.getElementById("question_amount") as HTMLInputElement).value),
     time_between_questions:Number((document.getElementById("question_time_interval") as HTMLInputElement).value)});
+});
+submit_button.addEventListener("click", () => {
+    (document.getElementById("username") as HTMLInputElement).value
 });
 function update_timer(){
     current_quiz_timer--;
