@@ -25,16 +25,10 @@ let interval:NodeJS.Timer;
 let quiz_started:boolean = false;
 let inserted_name:string = "Error: No name entered";
 let room_code:string = "Error: No room code entered";
-do{
-    document.getElementById("question_amount") as HTMLInputElement).value
-    inserted_name = prompt('What username do you want?');
-    room_code = prompt('What room code do you want to join/create?'); 
-} while(inserted_name === "" || room_code === "")
-
-socket.emit('new-user', { name: inserted_name, room: room_code });
-current_room!.innerText = room_code;
-
-socket.emit("scoreboard-update",cur_score);
+// do{
+//     inserted_name = prompt('What username do you want?');
+//     room_code = prompt('What room code do you want to join/create?'); 
+// } while(inserted_name === "" || room_code === "")
 
 
 document.getElementById("form")!.addEventListener('submit', e => {
@@ -163,9 +157,23 @@ rematch_button.addEventListener("click", () => {
     time_between_questions:Number((document.getElementById("question_time_interval") as HTMLInputElement).value)});
 });
 submit_button.addEventListener("click", () => {
-    (document.getElementById("username") as HTMLInputElement).value
+    let name = (document.getElementById("username") as HTMLInputElement);
+    let code = (document.getElementById("roomcode") as HTMLInputElement);
+    if(name.value !== "" && code.value !== ""){
+        inserted_name = name.value;
+        room_code = code.value;
+        socket.emit('new-user', { name: inserted_name, room: room_code });
+        current_room!.innerText = room_code;
+        socket.emit("scoreboard-update",cur_score);
+        (document.getElementsByClassName('login_container')[0] as HTMLElement).style.display = 'none';
+    }
+    else{
+        name.placeholder = "Username Required!";
+        code.placeholder = "Room code Required!"
+    }
 });
 function update_timer(){
+    
     current_quiz_timer--;
     quiz_timer?.innerHTML = current_quiz_timer;
     if(current_quiz_timer <= 0){

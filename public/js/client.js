@@ -12,6 +12,7 @@ var question_options = document.getElementById("question_options");
 var lobby_settings = document.getElementById("lobby_settings");
 var done_button = document.getElementById("done_button");
 var rematch_button = document.getElementById("rematch_button");
+var submit_button = document.getElementById("submit_button");
 var current_room = document.querySelector(".current_room span");
 var quiz_timer = document.getElementById("quiz_timer");
 var cur_quiz = 0;
@@ -22,13 +23,10 @@ var interval;
 var quiz_started = false;
 var inserted_name = "Error: No name entered";
 var room_code = "Error: No room code entered";
-do {
-    inserted_name = prompt('What username do you want?');
-    room_code = prompt('What room code do you want to join/create?');
-} while (inserted_name === "" || room_code === "");
-socket.emit('new-user', { name: inserted_name, room: room_code });
-current_room.innerText = room_code;
-socket.emit("scoreboard-update", cur_score);
+// do{
+//     inserted_name = prompt('What username do you want?');
+//     room_code = prompt('What room code do you want to join/create?'); 
+// } while(inserted_name === "" || room_code === "")
 document.getElementById("form").addEventListener('submit', function (e) {
     e.preventDefault();
     if (input.value) {
@@ -143,6 +141,22 @@ done_button.addEventListener("click", function () {
 rematch_button.addEventListener("click", function () {
     socket.emit("load-quiz", { number_of_questions: Number(document.getElementById("question_amount").value),
         time_between_questions: Number(document.getElementById("question_time_interval").value) });
+});
+submit_button.addEventListener("click", function () {
+    var name = document.getElementById("username");
+    var code = document.getElementById("roomcode");
+    if (name.value !== "" && code.value !== "") {
+        inserted_name = name.value;
+        room_code = code.value;
+        socket.emit('new-user', { name: inserted_name, room: room_code });
+        current_room.innerText = room_code;
+        socket.emit("scoreboard-update", cur_score);
+        document.getElementsByClassName('login_container')[0].style.display = 'none';
+    }
+    else {
+        name.placeholder = "Username Required!";
+        code.placeholder = "Room code Required!";
+    }
 });
 function update_timer() {
     var _a;
