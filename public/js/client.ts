@@ -79,6 +79,7 @@ socket.on('load-quiz', ({made_quiz, time}) => {
     quiz_started = true;
     cur_quiz = 0;
     cur_score = 0;
+    socket.emit("scoreboard-update",cur_score);
     rematch_button?.style.display = "none";
     done_button?.innerText = "Next Question";
     done_button?.style.display = "flex";
@@ -165,11 +166,12 @@ submit_button.addEventListener("click", () => {
         socket.emit('new-user', { name: inserted_name, room: room_code });
         current_room!.innerText = room_code;
         socket.emit("scoreboard-update",cur_score);
+        document.getElementById("bg_blocker")?.style.display = "none";
         (document.getElementsByClassName('login_container')[0] as HTMLElement).style.display = 'none';
     }
     else{
-        name.placeholder = "Username Required!";
-        code.placeholder = "Room code Required!"
+        name.placeholder = "Username required!";
+        code.placeholder = "Room code required!"
     }
 });
 function update_timer(){

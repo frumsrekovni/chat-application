@@ -1,7 +1,6 @@
 
 body { 
     background: #060CE9;
-    /* background: linear-gradient(45deg, rgba(31,30,30,1) 0%, rgba(48,48,46,1) 100%); */
     background: radial-gradient(circle, rgba(233,139,6,1) 0%, rgba(6,12,233,1) 100%);
     margin: 0;
     padding-bottom: 3rem;
@@ -118,18 +117,18 @@ button {
     outline: none;
     display: flex;
     cursor: pointer;
+  
 }
-button:hover{
+button:hover,button:focus{
     color: rgb(206, 198, 198);
     background: black; 
-
 }
 .login_container{
     position: absolute;
     background-color: whitesmoke;
     display: flex;
     flex-direction:column;
-    top:  50%;
+    top:  35%;
     left: 50%;
     transform: translate(-50%,-50%); 
     border-radius: 2px;
@@ -145,6 +144,9 @@ input[type=text], input[type=password] {
   }
 #rematch_button{
     display: none;
+}
+#submit_button{
+    margin: 0 auto;
 }
 #quiz_timer{
     font-size: xx-large;
@@ -164,7 +166,19 @@ input[type=text], input[type=password] {
 #question_options{
     display:none;
 }
-
+.hero_body li,ul{
+    list-style: none;
+}
+#bg_blocker{
+    display:flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    content: ' ';
+    background: rgba(0,0,0,.5); 
+}
 
 @media (max-width: 900px) {
     h1{
@@ -179,6 +193,9 @@ input[type=text], input[type=password] {
     top:  50%;
     }
     .container{
-        width: 90vw;
+        width: 80vw;
+    }
+    .login_container{
+        margin: 0;
     }
 }

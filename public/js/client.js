@@ -75,6 +75,7 @@ socket.on('scoreboard-update', function (input_scoreboard) {
         quiz_started = true;
         cur_quiz = 0;
         cur_score = 0;
+        socket.emit("scoreboard-update", cur_score);
         rematch_button === null || rematch_button === void 0 ? void 0 : rematch_button.style.display = "none";
         done_button === null || done_button === void 0 ? void 0 : done_button.innerText = "Next Question";
         done_button === null || done_button === void 0 ? void 0 : done_button.style.display = "flex";
@@ -143,6 +144,7 @@ rematch_button.addEventListener("click", function () {
         time_between_questions: Number(document.getElementById("question_time_interval").value) });
 });
 submit_button.addEventListener("click", function () {
+    var _a;
     var name = document.getElementById("username");
     var code = document.getElementById("roomcode");
     if (name.value !== "" && code.value !== "") {
@@ -151,11 +153,12 @@ submit_button.addEventListener("click", function () {
         socket.emit('new-user', { name: inserted_name, room: room_code });
         current_room.innerText = room_code;
         socket.emit("scoreboard-update", cur_score);
+        (_a = document.getElementById("bg_blocker")) === null || _a === void 0 ? void 0 : _a.style.display = "none";
         document.getElementsByClassName('login_container')[0].style.display = 'none';
     }
     else {
-        name.placeholder = "Username Required!";
-        code.placeholder = "Room code Required!";
+        name.placeholder = "Username required!";
+        code.placeholder = "Room code required!";
     }
 });
 function update_timer() {
